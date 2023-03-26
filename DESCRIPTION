@@ -1,0 +1,17 @@
+Package: bitToken2
+Title: Tokenize Text Data
+Version: 0.1.0
+Authors@R:
+    person("SHIN Jong-Hwa", email = "sens5900r@modernity.or.kr", role = c("aut", "cre"))
+Description:
+    This package provides a single function, `bitToken()`, which tokenizes text data in a specified column of a data frame.
+    The resulting tokens are returned as a vector or, optionally, as a vector of token lengths.
+    Filtering options are also available to allow the user to filter the data frame based on specific values.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Imports:
+    dplyr,
+    stringr,
+    rlang
+RoxygenNote: 7.2.2
