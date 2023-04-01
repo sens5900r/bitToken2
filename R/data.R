@@ -1,49 +1,40 @@
-#' News dataset for bitToken2 package
-#'
-#' A dataset containing 20 rows of news article titles and categories, designed for use with the bitToken2 package.
-#'
-#' @name chatGPT_news1
-#' @aliases chatGPT_news1
-#' @rdname chatGPT_news1
-#' @export
-# Create a dataframe with 20 rows
-chatGPT_df1 <- data.frame(
-  title = c(
-    "New policy proposal aims to reduce carbon emissions",
-    "Opposition leader calls for investigation into government corruption",
-    "Government announces plans to increase funding for healthcare",
-    "Economic growth slows down in Q3 of 2022",
-    "Global stock markets experience sharp decline",
-    "Report shows rising income inequality in the US",
-    "Rise in mental health concerns amidst pandemic",
-    "Study finds correlation between social media use and depression",
-    "Calls for greater support for domestic abuse victims",
-    "Apple unveils new lineup of iPhones at annual event",
-    "Facebook faces criticism over handling of user data",
-    "Google announces new privacy features for users",
-    "UN report highlights increasing climate change risks",
-    "China launches new space station module into orbit",
-    "Millions affected by ongoing refugee crisis in Syria",
-    "Brexit negotiations stall as deadline approaches",
-    "WHO declares COVID-19 a global pandemic",
-    "Amazon faces antitrust scrutiny from regulators",
-    "Young people protest for climate action around the world",
-    "Racism in football under the spotlight after European Championship final"
-  ),
-  category = c(
-    "politics", "politics", "politics",
-    "economy", "economy", "economy",
-    "society", "society", "society",
-    "IT", "IT", "IT",
-    "world", "world", "world",
-    "politics", "world", "IT",
-    "world", "society"
-  ),
-  stringsAsFactors = FALSE
+# create the data frame
+data <- data.frame(
+  title = c("New COVID-19 cases continue to rise in Europe",
+            "The US imposes sanctions on Russia over cyberattacks",
+            "Apple unveils new iPhone with advanced features",
+            "South Korea imposes new regulations on cryptocurrency",
+            "Global economy shows signs of recovery",
+            "Artificial intelligence takes over jobs in manufacturing industry",
+            "UK announces plans to reduce carbon emissions",
+            "Chinese government cracks down on online gaming addiction",
+            "North Korea launches new missile test",
+            "The rise of electric cars in the automotive industry",
+            "US withdraws troops from Afghanistan after 20-year war",
+            "Japan announces new measures to boost economy",
+            "France introduces new COVID-19 restrictions",
+            "The impact of climate change on agriculture",
+            "India surpasses China in population",
+            "The future of work in a post-pandemic world",
+            "Russia develops new military technology",
+            "The benefits and drawbacks of social media",
+            "South Africa struggles with high unemployment rate",
+            "The rise of e-commerce in the retail industry",
+            "UK faces Brexit trade deal uncertainty",
+            "The effects of the COVID-19 pandemic on mental health",
+            "China's Belt and Road Initiative",
+            "The ethics of artificial intelligence",
+            "The impact of the COVID-19 pandemic on education",
+            "Germany sees rise in far-right extremism",
+            "The future of renewable energy",
+            "Iran's nuclear program",
+            "The history of the internet",
+            "The impact of the COVID-19 pandemic on travel"),
+  category = c("world", "politics", "IT", "economy", "economy", "IT", "politics",
+               "society", "world", "IT", "politics", "economy", "society",
+               "world", "world", "society", "world", "society", "economy",
+               "economy", "politics", "society", "world", "IT", "education",
+               "society", "energy", "politics", "IT", "society")
 )
-
-# Assign name to the dataframe
-chatGPT_news1 <- chatGPT_df1
-
-
-data(chatGPT_news1)
+# save the data as an .rda file
+save(data, file = "data/chatGPT_news1.rda")
