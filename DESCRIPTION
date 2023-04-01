@@ -1,17 +1,15 @@
 Package: bitToken2
-Title: Tokenize Text Data
-Version: 0.2.0
-Authors@R:
-    person("SHIN Jong-Hwa", email = "sens5900r@modernity.or.kr", role = c("aut", "cre"))
-Description:
-    This package provides a single function, `bitToken()`, which tokenizes text data in a specified column of a data frame.
-    The resulting tokens are returned as a vector or, optionally, as a vector of token lengths.
-    Filtering options are also available to allow the user to filter the data frame based on specific values.
-License: MIT + file LICENSE
+Type: Package
+Title: Tokenization and Analysis of Text Data
+Version: 0.2.1
+Author: SHIN Jong-Hwa
+Maintainer: SHIN Jong-Hwa <sens5900r@modernity.or.kr>
+Description: Provides functions for tokenizing and analyzing text data. The main function bitToken() tokenizes a character vector or a list of character vectors and returns a data frame with the frequency count of each token. The function bitToken_info() calculates summary statistics of the number of tokens in a character vector or a list of character vectors. The function bitToken_check() checks if a specified column in a data frame contains only text data and is suitable for tokenization with bitToken().
+License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
+RoxygenNote: 7.2.2
 Imports:
     dplyr,
-    stringr,
-    rlang
-RoxygenNote: 7.2.2
+    rlang,
+    stringr

@@ -11,14 +11,41 @@
 #' @param lengths A logical value indicating whether to return the lengths of the tokens (default = FALSE)
 #'
 #' @return A list of token vectors or a vector of token lengths
+#'
+#' @examples
+#' \dontrun{
+#' library(bitToken2)
+#' data("chatGPT_news1")
+#' tokens <- bitToken(data = chatGPT_news1, text_column = "title")
+#' head(tokens)
+#' token_lengths <- bitToken(data = chatGPT_news1, text_column = "title", lengths=TRUE)
+#' }
+#'
 #' @export
 #'
 #' @import dplyr
 #' @import rlang
 #' @import stringr
-
+#'
+#' @keywords tokenizing text
+#' @seealso \code{\link[stringr]{str_split}} for more information on string splitting
 
 bitToken <- function(data, text_column, filter_var = NULL, filter_vals = NULL, lengths = FALSE) {
+  # check that data is a data frame
+  if (!is.data.frame(data)) {
+    stop("Error: 'data' must be a data frame.")
+  }
+
+  # check that text_column is a valid column name in the data frame
+  if (!text_column %in% names(data)) {
+    stop(paste("Error: '", text_column, "' is not a valid column name in the data frame.", sep = ""))
+  }
+
+  # check that text_column contains text data
+  if (!is.character(data[[text_column]]) && !is.factor(data[[text_column]])) {
+    stop(paste("Error: '", text_column, "' does not contain text data. Please provide a column that contains character or factor data.", sep = ""))
+  }
+
   # filter the data if necessary
   if (!is.null(filter_var) & !is.null(filter_vals)) {
     data <- dplyr::filter(data, !!rlang::sym(filter_var) %in% filter_vals)

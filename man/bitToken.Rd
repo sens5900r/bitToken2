@@ -31,3 +31,18 @@ This function tokenizes text data in a specified column of a data frame.
 The resulting tokens are returned as a list or, optionally, as a vector of token lengths.
 Filtering options are also available to allow the user to filter the data frame based on specific values.
 }
+\examples{
+\dontrun{
+library(bitToken2)
+data("chatGPT_news1")
+tokens <- bitToken(data = chatGPT_news1, text_column = "title")
+head(tokens)
+token_lengths <- bitToken(data = chatGPT_news1, text_column = "title", lengths=TRUE)
+}
+
+}
+\seealso{
+\code{\link[stringr]{str_split}} for more information on string splitting
+}
+\keyword{text}
+\keyword{tokenizing}
