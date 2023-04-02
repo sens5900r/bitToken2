@@ -4,7 +4,7 @@ bitToken2 is an R package for tokenizing text data in a data frame. It provides 
 
 ## **Installation**
 
-You can install bitToken2 from GitHub using the **`devtools`** package:
+You can install **`bitToken2`** from GitHub using the **`devtools`** package:
 
 ```{r}
 devtools::install_github("sens5900r/bitToken2")
@@ -12,13 +12,13 @@ devtools::install_github("sens5900r/bitToken2")
 
 ## **Usage**
 
-Here's an example of how to use bitToken2 to tokenize text data in a data frame:
+Here's an example of how to use **`bitToken2`** to tokenize text data in a data frame:
 
 ```{r}
 library(bitToken2)
 
 # Load example data
-data("chatGPT_news1")
+data(chatGPT_news1)
 
 # Tokenize text data in the "title" column
 tokens <- bitToken(data = chatGPT_news1, text_column = "title")
@@ -27,6 +27,11 @@ tokens <- bitToken(data = chatGPT_news1, text_column = "title")
 head(tokens)
 
 # recommened step by step: bitToken_check(), bitToken_info(), bitToken_viz(), bitToken()
+bitToken_check(example)
+
+bitToken_info(chatGPT_new1$title, add=TRUE)
+
+bitToken_viz(chatGPT_news1$title, type="histogram")
 ```
 
 ## **License**

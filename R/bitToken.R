@@ -15,7 +15,7 @@
 #' @examples
 #' \dontrun{
 #' library(bitToken2)
-#' data("chatGPT_news1")
+#' data(chatGPT_news1)
 #' tokens <- bitToken(data = chatGPT_news1, text_column = "title")
 #' head(tokens)
 #' token_lengths <- bitToken(data = chatGPT_news1, text_column = "title", lengths=TRUE)

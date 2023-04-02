@@ -12,6 +12,8 @@
 #' library(bitToken2)
 #' data(mtcars)
 #' bitToken_check(mtcars, "hp")
+#' data(chatGPT_news1)
+#' bitToken_check(chatGPT_news1, "title")
 #' }
 #'
 #' @export
