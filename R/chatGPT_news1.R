@@ -39,3 +39,6 @@ chatGPT_news1 <- data.frame(
                "economy", "politics", "society", "world", "IT", "education",
                "society", "energy", "politics", "IT", "society")
 )
+
+# save the data as an .rda file
+save(chatGPT_news1, file = "data/chatGPT_news1.rda")

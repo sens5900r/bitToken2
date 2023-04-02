@@ -5,7 +5,6 @@
 #' plot is also available.
 #'
 #' @import graphics
-#' @import stats
 #'
 #' @param x a character vector or a list of character vectors.
 #' @param type the type of plot to generate. Possible values are "boxplot" (default) and "histogram".

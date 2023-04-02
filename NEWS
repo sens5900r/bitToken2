@@ -1,0 +1,14 @@
+bitToken2 0.2.1
+
+* Fixed a bug related to `lengths` argument in `bitToken()`
+
+bitToken2 0.2.0
+
+* `bitToken_info()` added for displaying information about bitToken object
+* `bitToken_viz()` added for visualizing token frequency and ngram frequency
+* `bitToken_check()` added for checking for missing, inconsistent or duplicated tokens
+
+bitToken2 0.1.0
+
+* `bitToken()` function added for tokenizing text data
+* `chatGPT_new1.rda` added for generating text data with ChatGPT

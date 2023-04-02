@@ -46,9 +46,9 @@ bitToken <- function(data, text_column, filter_var = NULL, filter_vals = NULL, l
     stop(paste("Error: '", text_column, "' does not contain text data. Please provide a column that contains character or factor data.", sep = ""))
   }
 
-  # filter the data if necessary
   if (!is.null(filter_var) & !is.null(filter_vals)) {
-    data <- dplyr::filter(data, !!rlang::sym(filter_var) %in% filter_vals)
+    filter_expr <- rlang::expr(!!rlang::sym(filter_var) %in% !!filter_vals)
+    data <- dplyr::filter(data, !!filter_expr)
   }
 
   # tokenize the text column by splitting on whitespace
@@ -56,7 +56,7 @@ bitToken <- function(data, text_column, filter_var = NULL, filter_vals = NULL, l
 
   # return the tokens or lengths
   if (lengths) {
-    lengths <- lengths(tokens)
+    lengths <- as.numeric(lengths(tokens))
     return(lengths)
   } else {
     return(tokens)

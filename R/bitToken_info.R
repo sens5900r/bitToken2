@@ -28,7 +28,7 @@ bitToken_info <- function(x, add = FALSE, min_t = 1, max_t = Inf) {
   valid_tokens <- token_count[token_count >= min_t & token_count <= max_t]
   token_info <- c(
     Min. = min(valid_tokens),
-    Median = median(valid_tokens),
+    Median = stats::median(valid_tokens),
     Mode = as.integer(names(table(valid_tokens)[which.max(table(valid_tokens))])),
     Max. = max(valid_tokens)
   )
@@ -40,7 +40,11 @@ bitToken_info <- function(x, add = FALSE, min_t = 1, max_t = Inf) {
     num_rows <- length(x)
     mean_tokens <- round(mean(token_count), 2)
     prop_valid <- round(sum(token_count >= min_t & token_count <= max_t) / num_rows, 2)
+    object_size <- format(utils::object.size(x), units = "auto", standard = "SI")
+    mean_size <- format(utils::object.size(x)/num_rows, units = "auto", standard = "SI")
+    cat("Object size:", object_size, "\n")
     cat("Number of rows:", num_rows, "\n")
+    cat(paste0("Mean size per row:", mean_size, "\n"))
     cat("Mean number of tokens:", mean_tokens, "\n")
     cat(paste0("Proportion of rows with ", min_t, " to ", max_t, " tokens:", prop_valid, "\n"))
   }
