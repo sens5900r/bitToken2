@@ -5,7 +5,11 @@
 \alias{chatGPT_news1}
 \title{Sample news article titles and categories}
 \format{
-An object of class \code{data.frame} with 30 rows and 2 columns.
+A data frame with 30 rows and 2 variables:
+\describe{
+  \item{title}{A character vector of news article titles}
+  \item{category}{A character vector of news article categories}
+}
 }
 \usage{
 chatGPT_news1

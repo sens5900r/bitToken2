@@ -5,25 +5,28 @@
 \title{Visualize Token Information for Character Vectors}
 \usage{
 bitToken_viz(
-  x,
+  data,
+  text_column,
   type = "boxplot",
   round = FALSE,
-  remove_outliers = FALSE,
+  rm_outliers = FALSE,
   info = FALSE
 )
 }
 \arguments{
-\item{x}{a character vector or a list of character vectors.}
+\item{data}{A data frame.}
 
-\item{type}{the type of plot to generate. Possible values are "boxplot" (default) and "histogram".}
+\item{text_column}{The name of the column that contains the text data.}
 
-\item{round}{an optional logical value indicating whether to round the output to integers.
+\item{type}{The type of plot to generate. Possible values are "boxplot" (default) and "histogram".}
+
+\item{round}{An optional logical value indicating whether to round the output to integers.
 The default value is FALSE.}
 
-\item{remove_outliers}{an optional logical value indicating whether to remove outliers from the boxplot.
+\item{rm_outliers}{An optional logical value indicating whether to remove outliers from the boxplot.
 The default value is FALSE.}
 
-\item{info}{an optional logical value indicating whether to print the median and mean values on the plot.
+\item{info}{An optional logical value indicating whether to print the median and mean values on the plot.
 The default value is FALSE.}
 }
 \value{
@@ -35,7 +38,7 @@ a plot of their token information. The default plot type is a boxplot, but a his
 plot is also available.
 }
 \examples{
-bitToken_viz(chatGPT_news1$title, type = "boxplot", remove_outliers = TRUE, info = TRUE)
-bitToken_viz(chatGPT_news1$title, type = "histogram", info = TRUE)
+bitToken_viz(chatGPT_news1, "title", type = "boxplot", rm_outliers = TRUE, info = TRUE)
+bitToken_viz(chatGPT_news1, "title", type = "histogram", info = TRUE)
 
 }

@@ -1,14 +1,28 @@
+bitToken2 0.3.2
+
+* bitToken_rec() function added for calculating the number of tokens in a given text column and finding rows with at least a specified number of tokens
+* Updated bitToken_order() function to support new features
+
+bitToken2 0.3.1
+
+* bitToken_order() function added for extracting the specified token number from a column of text strings and returning a vector of the tokens in descending order by their frequency
+* Updated bitToken_count() function to support new features
+
+bitToken2 0.3.0
+
+* bitToken_count() function added for counting the occurrences of a specific character or string in each row of the specified text column in a data frame
+* Updated bitToken() function to support new features
+
 bitToken2 0.2.1
 
-* Fixed a bug related to `lengths` argument in `bitToken()`
+* Fixed a bug related to lengths argument in bitToken()
 
 bitToken2 0.2.0
 
-* `bitToken_info()` added for displaying information about bitToken object
-* `bitToken_viz()` added for visualizing token frequency and ngram frequency
-* `bitToken_check()` added for checking for missing, inconsistent or duplicated tokens
+* bitToken_info() added for displaying information about bitToken object
+* bitToken_check() added for checking for missing, inconsistent or duplicated tokens
 
 bitToken2 0.1.0
 
-* `bitToken()` function added for tokenizing text data
-* `chatGPT_new1.rda` added for generating text data with ChatGPT
+* bitToken() function added for tokenizing text data
+* chatGPT_new1.rda added for generating text data with ChatGPT

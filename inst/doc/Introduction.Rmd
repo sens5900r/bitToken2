@@ -1,0 +1,118 @@
+---
+title: "bitToken2: An Introduction"
+author: "SHIN Jong-Hwa"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_vignette: default
+  rmarkdown::pdf_document:
+    latex_engine: xelatex
+    keep_tex: true
+vignette: >
+  %\VignetteEncoding{UTF-8}
+  %\VignetteIndexEntry{bitToken2: An Introduction}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## **Overview**
+
+The **`bitToken2`** package is a powerful and flexible collection of functions designed to help you process and analyze textual data in R. The package contains a set of core **`bitToken`** functions and their extended versions, the **`bitToken_`** series, which provide additional functionality and options for users. This vignette aims to introduce you to the main features and functionalities of the **`bitToken2`** package and demonstrate how to effectively use them in your data analysis workflow.
+
+## **Package Installation**
+
+To install the **`bitToken2`** package, use the following command in your R console:\
+
+```{r, eval=F}
+install.packages("bitToken2")
+```
+
+After installing the package, load it into your R environment with:
+
+```{r, eval=F}
+library(bitToken2)
+```
+
+## **Core bitToken Functions**
+
+The **`bitToken2`** package provides a set of core **`bitToken`** functions that cover common text processing tasks such as token counting, ordering, visualization, and filtering. These functions are designed to be user-friendly, efficient, and versatile, allowing you to easily integrate them into your data analysis pipeline.
+
+Some of the core **`bitToken`** functions include:
+
+1.  **`bitToken_count()`**: Counts the occurrences of a specific character or string in each row of the specified text column in a data frame.
+
+2.  **`bitToken_order()`**: Extracts the specified token number from a column of text strings and returns a vector of the tokens in descending order by their frequency.
+
+3.  **`bitToken_viz()`**: Generates a plot of token information for character vectors. The default plot type is a boxplot, but a histogram plot is also available.
+
+4.  **`bitToken_min()`**: Calculates the number of tokens in a given text column and finds rows with at least a specified number of tokens.
+
+## **Extended bitToken\_ Series**
+
+The **`bitToken2`** package also includes the **`bitToken_`** series of functions, which are extended versions of the core functions that offer additional functionality and options. These functions allow for more advanced and customized processing of textual data, enabling you to tailor the analysis to your specific needs.
+
+Some of the extended **`bitToken_`** functions include:
+
+1.  **`bitToken_count_()`**: An extended version of **`bitToken_count()`** that offers additional options such as returning token positions and summary information.
+
+2.  **`bitToken_order_()`**: An extended version of **`bitToken_order()`** that provides more advanced sorting and filtering options.
+
+3.  **`bitToken_viz_()`**: An extended version of **`bitToken_viz()`** that offers additional plot types and customization options.
+
+## **Example Usage**
+
+To demonstrate the use of **`bitToken2`** functions, let's consider an example dataset called **`chatGPT_news1`**. This dataset contains news article titles in a column called "title". We'll perform some common text processing tasks using the **`bitToken2`** package.
+
+### **Counting Tokens**
+
+We can use the **`bitToken_count()`** function to count the occurrences of a specific character or string in each row of the "title" column:
+
+```{r, eval=F}
+comma_counts <- bitToken_count(data = chatGPT_news1, text_column = "title", pattern = ",")
+```
+
+### **Ordering Tokens by Frequency**
+
+To extract the first token from each title and order them by frequency, we can use the **`bitToken_order()`** function:
+
+```{r, eval=F}
+ordered_tokens <- bitToken_order(chatGPT_news1, "title", 1)
+```
+
+### **Visualizing Token Information**
+
+Using the **`bitToken_viz()`** function, we can create a boxplot of the token information for the "title" column:
+
+```{r, eval=F}
+bitToken_viz(data = chatGPT_news1, text_column = "title", type = "boxplot", remove_outliers = TRUE, info = TRUE)
+```
+
+This command generates a boxplot of the number of tokens per title, with the option to remove outliers and display median and mean values on the plot. The \`bitToken_viz()\` function also allows you to create a histogram plot by changing the \`type\` parameter to "histogram":\
+
+```{r, eval=F}
+bitToken_viz(data = chatGPT_news1, text_column = "title", type = "histogram", info = TRUE)
+```
+
+This command generates a histogram of the number of tokens per title, with vertical lines indicating the median and mean values.
+
+### **Filtering Rows Based on Token Count**
+
+To find rows with at least a specified number of tokens, we can use the **`bitToken_min()`** function. For example, to find rows with at least 5 tokens in the "title" column, we can use the following command:
+
+```{r, eval=F}
+rows_with_min_tokens <- bitToken_min(data = chatGPT_news1, col_name = "title", min_tokens = 5, value = FALSE)
+```
+
+By setting the **`value`** parameter to TRUE, the function will return the actual row values instead of the row indices:
+
+```{r, eval=F}
+rows_with_min_tokens_values <- bitToken_min(data = chatGPT_news1, col_name = "title", min_tokens = 5, value = TRUE)
+```
+
+## **Conclusion**
+
+The **`bitToken2`** package is a comprehensive and versatile solution for text processing and analysis in R. Its core **`bitToken`** functions and extended **`bitToken_`** series offer a wide range of capabilities, allowing you to efficiently process, analyze, and visualize textual data according to your specific needs.
+
+By incorporating **`bitToken2`** functions into your data analysis workflow, you can easily tackle complex text processing tasks and gain valuable insights from your data. Explore the full range of **`bitToken2`** functions and their options to unleash the full potential of your textual data analysis.

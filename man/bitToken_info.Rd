@@ -4,10 +4,12 @@
 \alias{bitToken_info}
 \title{Token Information}
 \usage{
-bitToken_info(x, add = FALSE, min_t = 1, max_t = Inf)
+bitToken_info(data, text_column, add = FALSE, min_t = 1, max_t = Inf)
 }
 \arguments{
-\item{x}{A character vector or a list of character vectors.}
+\item{data}{A character vector or a list of character vectors.}
+
+\item{text_column}{A string specifying the name of the text column in the input data.}
 
 \item{add}{A logical indicating whether to include additional information about the data.}
 
@@ -22,7 +24,8 @@ A named numeric vector with the minimum, median, mode, and maximum number of tok
 Get information about the number of tokens in a character vector or list of character vectors.
 }
 \examples{
-bitToken_info(chatGPT_news1$title)
-bitToken_info(chatGPT_news1$title, min_t = 5, max_t = 20, add = TRUE)
+data("chatGPT_news1", package = "bitToken2")
+bitToken_info(chatGPT_news1, "title")
+bitToken_info(chatGPT_news1, "title", min_t = 3, max_t = 10, add = TRUE)
 
 }

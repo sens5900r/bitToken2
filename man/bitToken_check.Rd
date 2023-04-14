@@ -22,6 +22,8 @@ This function checks if a dataset is relevant for tokenizing with bitToken() by 
 library(bitToken2)
 data(mtcars)
 bitToken_check(mtcars, "hp")
+data(chatGPT_news1)
+bitToken_check(chatGPT_news1, "title")
 }
 
 }
