@@ -1,3 +1,12 @@
+bitToken2 0.4.1
+
+Added legend to bitToken_viz() and bitToken_viz_m() functions to display information about median and mean
+
+bitToken2 0.4.0
+
+Added multi-core support to bitToken_m(), bitToken_count_m(), bitToken_info_m(), bitToken_min_m(), bitToken_order_m(), bitToken_viz_m() functions
+
+
 bitToken2 0.3.2
 
 * bitToken_rec() function added for calculating the number of tokens in a given text column and finding rows with at least a specified number of tokens

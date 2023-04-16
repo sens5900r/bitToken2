@@ -12,7 +12,7 @@
 
 <meta name="author" content="SHIN Jong-Hwa" />
 
-<meta name="date" content="2023-04-14" />
+<meta name="date" content="2023-04-16" />
 
 <title>bitToken2: An Introduction</title>
 
@@ -341,7 +341,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">bitToken2: An Introduction</h1>
 <h4 class="author">SHIN Jong-Hwa</h4>
-<h4 class="date">2023-04-14</h4>
+<h4 class="date">2023-04-16</h4>
 
 
 
@@ -362,7 +362,7 @@ effectively use them in your data analysis workflow.</p>
 <p>To install the <strong><code>bitToken2</code></strong> package, use
 the following command in your R console:<br />
 </p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;bitToken2&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;sens5900r/bitToken2&quot;</span>)</span></code></pre></div>
 <p>After installing the package, load it into your R environment
 with:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bitToken2)</span></code></pre></div>
@@ -428,7 +428,7 @@ package.</p>
 <p>We can use the <strong><code>bitToken_count()</code></strong>
 function to count the occurrences of a specific character or string in
 each row of the “title” column:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>comma_counts <span class="ot">&lt;-</span> <span class="fu">bitToken_count</span>(<span class="at">data =</span> chatGPT_news1, <span class="at">text_column =</span> <span class="st">&quot;title&quot;</span>, <span class="at">pattern =</span> <span class="st">&quot;,&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>comma_counts <span class="ot">&lt;-</span> <span class="fu">bitToken_count</span>(chatGPT_news1, <span class="st">&quot;title&quot;</span>, <span class="at">pattern =</span> <span class="st">&quot;,&quot;</span>)</span></code></pre></div>
 </div>
 <div id="ordering-tokens-by-frequency" class="section level3">
 <h3><strong>Ordering Tokens by Frequency</strong></h3>
@@ -442,13 +442,13 @@ function:</p>
 <p>Using the <strong><code>bitToken_viz()</code></strong> function, we
 can create a boxplot of the token information for the “title”
 column:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bitToken_viz</span>(<span class="at">data =</span> chatGPT_news1, <span class="at">text_column =</span> <span class="st">&quot;title&quot;</span>, <span class="at">type =</span> <span class="st">&quot;boxplot&quot;</span>, <span class="at">remove_outliers =</span> <span class="cn">TRUE</span>, <span class="at">info =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bitToken_viz</span>(chatGPT_news1, <span class="st">&quot;title&quot;</span>, <span class="at">type =</span> <span class="st">&quot;boxplot&quot;</span>, <span class="at">rm_outliers =</span> <span class="cn">TRUE</span>, <span class="at">info =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <p>This command generates a boxplot of the number of tokens per title,
 with the option to remove outliers and display median and mean values on
 the plot. The `bitToken_viz()` function also allows you to create a
 histogram plot by changing the `type` parameter to “histogram”:<br />
 </p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bitToken_viz</span>(<span class="at">data =</span> chatGPT_news1, <span class="at">text_column =</span> <span class="st">&quot;title&quot;</span>, <span class="at">type =</span> <span class="st">&quot;histogram&quot;</span>, <span class="at">info =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bitToken_viz</span>(chatGPT_news1, <span class="st">&quot;title&quot;</span>, <span class="at">type =</span> <span class="st">&quot;histogram&quot;</span>, <span class="at">info =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <p>This command generates a histogram of the number of tokens per title,
 with vertical lines indicating the median and mean values.</p>
 </div>
@@ -458,12 +458,33 @@ with vertical lines indicating the median and mean values.</p>
 the <strong><code>bitToken_min()</code></strong> function. For example,
 to find rows with at least 5 tokens in the “title” column, we can use
 the following command:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>rows_with_min_tokens <span class="ot">&lt;-</span> <span class="fu">bitToken_min</span>(<span class="at">data =</span> chatGPT_news1, <span class="at">col_name =</span> <span class="st">&quot;title&quot;</span>, <span class="at">min_tokens =</span> <span class="dv">5</span>, <span class="at">value =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>rows_with_min_tokens <span class="ot">&lt;-</span> <span class="fu">bitToken_min</span>(chatGPT_news1, <span class="st">&quot;title&quot;</span>, <span class="at">min_tokens =</span> <span class="dv">5</span>, <span class="at">value =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <p>By setting the <strong><code>value</code></strong> parameter to TRUE,
 the function will return the actual row values instead of the row
 indices:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>rows_with_min_tokens_values <span class="ot">&lt;-</span> <span class="fu">bitToken_min</span>(<span class="at">data =</span> chatGPT_news1, <span class="at">col_name =</span> <span class="st">&quot;title&quot;</span>, <span class="at">min_tokens =</span> <span class="dv">5</span>, <span class="at">value =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>rows_with_min_tokens_values <span class="ot">&lt;-</span> <span class="fu">bitToken_min</span>(chatGPT_news1, <span class="st">&quot;title&quot;</span>, <span class="at">min_tokens =</span> <span class="dv">5</span>, <span class="at">value =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 </div>
+</div>
+<div id="multi-core-support" class="section level2">
+<h2><strong>Multi-core Support</strong></h2>
+<p>The package now includes multi-core support for several functions,
+allowing for parallel processing to greatly speed up processing time for
+large datasets. The <strong><code>bitToken_m()</code></strong>,
+<strong><code>bitToken_count_m()</code></strong>,
+<strong><code>bitToken_info_m()</code></strong>,
+<strong><code>bitToken_min_m()</code></strong> ,
+<strong><code>bitToken_order_m()</code></strong>, and
+<strong><code>bitToken_viz_m()</code></strong> functions have been
+updated to utilize parallel processing with the
+<strong><code>parallel::mclapply()</code></strong> function, with
+support for up to 8 cores.</p>
+<p>Here is an example of how to use the multi-core supported
+<strong><code>bitToken_m()</code></strong> function:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tokenize text data in the &quot;title&quot; column using multi-core support</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>tokens <span class="ot">&lt;-</span> <span class="fu">bitToken_m</span>(<span class="at">data =</span> chatGPT_news1, <span class="at">text_column =</span> <span class="st">&quot;title&quot;</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract Token in Descending Order by Frequency with Multi-Core Support</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">bitToken_info_m</span>(chatGPT_news1, <span class="st">&quot;title&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span></code></pre></div>
 </div>
 <div id="conclusion" class="section level2">
 <h2><strong>Conclusion</strong></h2>

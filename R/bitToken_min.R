@@ -13,7 +13,7 @@
 #' @importFrom stringr str_split
 #'
 #' @examples
-#' bitToken_min(chatGPT_news1, "title", min_tokens = 5, value = TRUE)
+#' tokens5_plus <- bitToken_min(chatGPT_news1, "title", min_tokens = 5, value = TRUE)
 #'
 #' @export
 bitToken_min <- function(data, col_name, min_tokens = 3, value = FALSE) {

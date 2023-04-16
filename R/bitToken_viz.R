@@ -15,6 +15,8 @@
 #' The default value is FALSE.
 #' @param info An optional logical value indicating whether to print the median and mean values on the plot.
 #' The default value is FALSE.
+#' @param plot_title An optional character string for the plot title.
+#' The default value is "Token Information Visualization".
 #'
 #' @return A plot of the token information for the input character vectors.
 #'
@@ -23,7 +25,7 @@
 #' bitToken_viz(chatGPT_news1, "title", type = "histogram", info = TRUE)
 #'
 #' @export
-bitToken_viz <- function(data, text_column, type = "boxplot", round = FALSE, rm_outliers = FALSE, info = FALSE) {
+bitToken_viz <- function(data, text_column, type = "boxplot", round = FALSE, rm_outliers = FALSE, info = FALSE, plot_title = "Token Information Visualization") {
   # check if input is valid
   if (!is.character(data[[text_column]])) {
     stop("Invalid input. The column must contain character data.")
@@ -40,7 +42,7 @@ bitToken_viz <- function(data, text_column, type = "boxplot", round = FALSE, rm_
   if(type == "boxplot") {
     # generate boxplot
     if(rm_outliers) {
-      boxplot(token_lengths, outline=FALSE, ylab="Number of Tokens", ylim=c(0, max(token_lengths) + 1))
+      boxplot(token_lengths, outline=FALSE, ylab="Number of Tokens", ylim=c(0, max(token_lengths, na.rm=TRUE) + 1))
     } else {
       boxplot(token_lengths, ylab="Number of Tokens", ylim=c(0, max(token_lengths) + 1))
     }
@@ -52,15 +54,18 @@ bitToken_viz <- function(data, text_column, type = "boxplot", round = FALSE, rm_
       abline(h=token_info["Median"], col="red", lty=2, lwd=2)
       # add a horizontal line for the mean
       abline(h=mean(token_lengths), col="blue", lty=2, lwd=2)
+      legend("topright", c("Median", "Mean"), lty=c(1,1), col=c("red", "blue"), bty="n")
     }
+    title(plot_title)
   } else if(type == "histogram") {
     # generate histogram
-    hist(token_lengths, breaks=seq(0, max(token_lengths) + 1, by=1), xlab="Number of Tokens", ylab="Frequency", main="")
+    hist(token_lengths, breaks=seq(0, max(token_lengths) + 1, by=1), xlab="Number of Tokens", ylab="Frequency", main=plot_title)
     if(info) {
       # add a vertical line for the median
       abline(v=token_info["Median"], col="red", lty=2, lwd=2)
       # add a vertical line for the mean
       abline(v=mean(token_lengths), col="blue", lty=2, lwd=2)
+      legend("topright", c("Median", "Mean"), lty=c(1,1), col=c("red", "blue"), bty="n")
     }
   } else {
     stop("Invalid plot type. Possible values are 'boxplot' and 'histogram'.")

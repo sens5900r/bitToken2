@@ -10,7 +10,8 @@ bitToken_viz(
   type = "boxplot",
   round = FALSE,
   rm_outliers = FALSE,
-  info = FALSE
+  info = FALSE,
+  plot_title = "Token Information Visualization"
 )
 }
 \arguments{
@@ -28,6 +29,9 @@ The default value is FALSE.}
 
 \item{info}{An optional logical value indicating whether to print the median and mean values on the plot.
 The default value is FALSE.}
+
+\item{plot_title}{An optional character string for the plot title.
+The default value is "Token Information Visualization".}
 }
 \value{
 A plot of the token information for the input character vectors.

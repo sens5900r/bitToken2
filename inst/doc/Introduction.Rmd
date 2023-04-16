@@ -26,7 +26,7 @@ The **`bitToken2`** package is a powerful and flexible collection of functions d
 To install the **`bitToken2`** package, use the following command in your R console:\
 
 ```{r, eval=F}
-install.packages("bitToken2")
+devtools::install_github("sens5900r/bitToken2")
 ```
 
 After installing the package, load it into your R environment with:
@@ -70,7 +70,7 @@ To demonstrate the use of **`bitToken2`** functions, let's consider an example d
 We can use the **`bitToken_count()`** function to count the occurrences of a specific character or string in each row of the "title" column:
 
 ```{r, eval=F}
-comma_counts <- bitToken_count(data = chatGPT_news1, text_column = "title", pattern = ",")
+comma_counts <- bitToken_count(chatGPT_news1, "title", pattern = ",")
 ```
 
 ### **Ordering Tokens by Frequency**
@@ -86,13 +86,13 @@ ordered_tokens <- bitToken_order(chatGPT_news1, "title", 1)
 Using the **`bitToken_viz()`** function, we can create a boxplot of the token information for the "title" column:
 
 ```{r, eval=F}
-bitToken_viz(data = chatGPT_news1, text_column = "title", type = "boxplot", remove_outliers = TRUE, info = TRUE)
+bitToken_viz(chatGPT_news1, "title", type = "boxplot", rm_outliers = TRUE, info = TRUE)
 ```
 
 This command generates a boxplot of the number of tokens per title, with the option to remove outliers and display median and mean values on the plot. The \`bitToken_viz()\` function also allows you to create a histogram plot by changing the \`type\` parameter to "histogram":\
 
 ```{r, eval=F}
-bitToken_viz(data = chatGPT_news1, text_column = "title", type = "histogram", info = TRUE)
+bitToken_viz(chatGPT_news1, "title", type = "histogram", info = TRUE)
 ```
 
 This command generates a histogram of the number of tokens per title, with vertical lines indicating the median and mean values.
@@ -102,13 +102,28 @@ This command generates a histogram of the number of tokens per title, with verti
 To find rows with at least a specified number of tokens, we can use the **`bitToken_min()`** function. For example, to find rows with at least 5 tokens in the "title" column, we can use the following command:
 
 ```{r, eval=F}
-rows_with_min_tokens <- bitToken_min(data = chatGPT_news1, col_name = "title", min_tokens = 5, value = FALSE)
+rows_with_min_tokens <- bitToken_min(chatGPT_news1, "title", min_tokens = 5, value = FALSE)
 ```
 
 By setting the **`value`** parameter to TRUE, the function will return the actual row values instead of the row indices:
 
 ```{r, eval=F}
-rows_with_min_tokens_values <- bitToken_min(data = chatGPT_news1, col_name = "title", min_tokens = 5, value = TRUE)
+rows_with_min_tokens_values <- bitToken_min(chatGPT_news1, "title", min_tokens = 5, value = TRUE)
+```
+
+## **Multi-core Support**
+
+The package now includes multi-core support for several functions, allowing for parallel processing to greatly speed up processing time for large datasets. The **`bitToken_m()`**, **`bitToken_count_m()`**, **`bitToken_info_m()`**, **`bitToken_min_m()`** , **`bitToken_order_m()`**, and **`bitToken_viz_m()`** functions have been updated to utilize parallel processing with the **`parallel::mclapply()`** function, with support for up to 8 cores.
+
+Here is an example of how to use the multi-core supported **`bitToken_m()`** function:
+
+```{r, eval=F}
+
+# Tokenize text data in the "title" column using multi-core support
+tokens <- bitToken_m(data = chatGPT_news1, text_column = "title")
+
+# Extract Token in Descending Order by Frequency with Multi-Core Support
+bitToken_info_m(chatGPT_news1, "title", add=TRUE)
 ```
 
 ## **Conclusion**
