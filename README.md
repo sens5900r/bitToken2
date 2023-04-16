@@ -23,7 +23,7 @@ data(chatGPT_news1)
 # Tokenize text data in the "title" column in a dataframe
 tokens <- bitToken(chatGPT_news1, "title")
 
-# View the first 5 tokens
+# View the first 6 tokens
 head(tokens)
 
 # recommened step by step: bitToken_check(), bitToken_info(), bitToken_viz(), bitToken()
