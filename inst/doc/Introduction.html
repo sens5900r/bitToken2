@@ -12,7 +12,7 @@
 
 <meta name="author" content="SHIN Jong-Hwa" />
 
-<meta name="date" content="2023-04-16" />
+<meta name="date" content="2023-04-18" />
 
 <title>bitToken2: An Introduction</title>
 
@@ -341,7 +341,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">bitToken2: An Introduction</h1>
 <h4 class="author">SHIN Jong-Hwa</h4>
-<h4 class="date">2023-04-16</h4>
+<h4 class="date">2023-04-18</h4>
 
 
 
@@ -369,28 +369,27 @@ with:</p>
 </div>
 <div id="core-bittoken-functions" class="section level2">
 <h2><strong>Core bitToken Functions</strong></h2>
-<p>The <strong><code>bitToken2</code></strong> package provides a set of
-core <strong><code>bitToken</code></strong> functions that cover common
-text processing tasks such as token counting, ordering, visualization,
-and filtering. These functions are designed to be user-friendly,
-efficient, and versatile, allowing you to easily integrate them into
-your data analysis pipeline.</p>
-<p>Some of the core <strong><code>bitToken</code></strong> functions
-include:</p>
-<ol style="list-style-type: decimal">
-<li><p><strong><code>bitToken_count()</code></strong>: Counts the
-occurrences of a specific character or string in each row of the
-specified text column in a data frame.</p></li>
-<li><p><strong><code>bitToken_order()</code></strong>: Extracts the
-specified token number from a column of text strings and returns a
-vector of the tokens in descending order by their frequency.</p></li>
-<li><p><strong><code>bitToken_viz()</code></strong>: Generates a plot of
-token information for character vectors. The default plot type is a
-boxplot, but a histogram plot is also available.</p></li>
-<li><p><strong><code>bitToken_min()</code></strong>: Calculates the
-number of tokens in a given text column and finds rows with at least a
-specified number of tokens.</p></li>
-</ol>
+<p>One of the core bitToken functions is
+<strong><code>bitToken()</code></strong>:</p>
+<p><strong><code>bitToken(data, text_column, filter_var = NULL, filter_vals = NULL, lengths = FALSE)</code></strong></p>
+<ul>
+<li><p><strong><code>data</code></strong>: A data frame containing the
+text data to tokenize.</p></li>
+<li><p><strong><code>text_column</code></strong>: The name of the column
+in <strong><code>data</code></strong> containing the text data to
+tokenize.</p></li>
+<li><p><strong><code>filter_var</code></strong>: The name of a column in
+<strong><code>data</code></strong> to filter on (optional).</p></li>
+<li><p><strong><code>filter_vals</code></strong>: A vector of values to
+filter on in <strong><code>filter_var</code></strong>
+(optional).</p></li>
+<li><p><strong><code>lengths</code></strong>: A logical value indicating
+whether to return the lengths of the tokens (default = FALSE).</p></li>
+</ul>
+<p>This function tokenizes text data in a specified column of a data
+frame. The resulting tokens are returned as a list or, optionally, as a
+vector of token lengths. Filtering options are also available to allow
+the user to filter the data frame based on specific values.</p>
 </div>
 <div id="extended-bittoken_-series" class="section level2">
 <h2><strong>Extended bitToken_ Series</strong></h2>
@@ -403,16 +402,23 @@ analysis to your specific needs.</p>
 <p>Some of the extended <strong><code>bitToken_</code></strong>
 functions include:</p>
 <ol style="list-style-type: decimal">
-<li><p><strong><code>bitToken_count_()</code></strong>: An extended
-version of <strong><code>bitToken_count()</code></strong> that offers
-additional options such as returning token positions and summary
-information.</p></li>
-<li><p><strong><code>bitToken_order_()</code></strong>: An extended
-version of <strong><code>bitToken_order()</code></strong> that provides
-more advanced sorting and filtering options.</p></li>
-<li><p><strong><code>bitToken_viz_()</code></strong>: An extended
-version of <strong><code>bitToken_viz()</code></strong> that offers
-additional plot types and customization options.</p></li>
+<li><p><strong><code>bitToken_info()</code></strong>: An extended
+version of <strong><code>bitToken(..., lengths=TRUE)</code></strong>
+that offers additional options such as returning token positions and
+summary information.</p></li>
+<li><p><strong><code>bitToken_count()</code></strong>: Counts the
+occurrences of a specific character or string in each row of the
+specified text column in a data frame.</p></li>
+<li><p><strong><code>bitToken_min()</code></strong>: An extended version
+of <strong><code>bitToken(..., lengths=TRUE)</code></strong> that
+calculates the number of tokens in a given text column and finds rows
+with at least a specified number of tokens.</p></li>
+<li><p><strong><code>bitToken_order()</code></strong>: An extended
+version of <strong><code>bitToken()</code></strong> that provides more
+advanced sorting and filtering options.</p></li>
+<li><p><strong><code>bitToken_viz()</code></strong>: An extended version
+of <strong><code>bitToken(..., lengths = TRUE)</code></strong> that
+offers additional plot types and customization options.</p></li>
 </ol>
 </div>
 <div id="example-usage" class="section level2">
@@ -428,7 +434,7 @@ package.</p>
 <p>We can use the <strong><code>bitToken_count()</code></strong>
 function to count the occurrences of a specific character or string in
 each row of the “title” column:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>comma_counts <span class="ot">&lt;-</span> <span class="fu">bitToken_count</span>(chatGPT_news1, <span class="st">&quot;title&quot;</span>, <span class="at">pattern =</span> <span class="st">&quot;,&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>apple_counts <span class="ot">&lt;-</span> <span class="fu">bitToken_count</span>(chatGPT_news1, <span class="st">&quot;title&quot;</span>, <span class="at">pattern =</span> <span class="st">&quot;(?i)apple&quot;</span>)</span></code></pre></div>
 </div>
 <div id="ordering-tokens-by-frequency" class="section level3">
 <h3><strong>Ordering Tokens by Frequency</strong></h3>
@@ -442,7 +448,7 @@ function:</p>
 <p>Using the <strong><code>bitToken_viz()</code></strong> function, we
 can create a boxplot of the token information for the “title”
 column:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bitToken_viz</span>(chatGPT_news1, <span class="st">&quot;title&quot;</span>, <span class="at">type =</span> <span class="st">&quot;boxplot&quot;</span>, <span class="at">rm_outliers =</span> <span class="cn">TRUE</span>, <span class="at">info =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bitToken_viz</span>(chatGPT_news1, <span class="st">&quot;title&quot;</span>, <span class="at">type =</span> <span class="st">&quot;boxplot&quot;</span>, <span class="at">rm_outliers =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <p>This command generates a boxplot of the number of tokens per title,
 with the option to remove outliers and display median and mean values on
 the plot. The `bitToken_viz()` function also allows you to create a
@@ -458,11 +464,11 @@ with vertical lines indicating the median and mean values.</p>
 the <strong><code>bitToken_min()</code></strong> function. For example,
 to find rows with at least 5 tokens in the “title” column, we can use
 the following command:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>rows_with_min_tokens <span class="ot">&lt;-</span> <span class="fu">bitToken_min</span>(chatGPT_news1, <span class="st">&quot;title&quot;</span>, <span class="at">min_tokens =</span> <span class="dv">5</span>, <span class="at">value =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>rows_with_min_tokens <span class="ot">&lt;-</span> <span class="fu">bitToken_min</span>(chatGPT_news1, <span class="st">&quot;title&quot;</span>, <span class="at">min_tokens =</span> <span class="dv">7</span>)</span></code></pre></div>
 <p>By setting the <strong><code>value</code></strong> parameter to TRUE,
 the function will return the actual row values instead of the row
 indices:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>rows_with_min_tokens_values <span class="ot">&lt;-</span> <span class="fu">bitToken_min</span>(chatGPT_news1, <span class="st">&quot;title&quot;</span>, <span class="at">min_tokens =</span> <span class="dv">5</span>, <span class="at">value =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>rows_with_min_tokens_values <span class="ot">&lt;-</span> <span class="fu">bitToken_min</span>(chatGPT_news1, <span class="st">&quot;title&quot;</span>, <span class="at">min_tokens =</span> <span class="dv">7</span>, <span class="at">value =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 </div>
 </div>
 <div id="multi-core-support" class="section level2">

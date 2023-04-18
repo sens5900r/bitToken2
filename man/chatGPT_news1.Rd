@@ -17,4 +17,12 @@ chatGPT_news1
 \description{
 A dataset containing 30 news article titles and their corresponding categories
 }
+\examples{
+# Load the dataset
+data("chatGPT_news1")
+
+# View the first 6 rows of the dataset
+head(chatGPT_news1)
+
+}
 \keyword{datasets}

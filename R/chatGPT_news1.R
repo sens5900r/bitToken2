@@ -7,4 +7,11 @@
 #'   \item{title}{A character vector of news article titles}
 #'   \item{category}{A character vector of news article categories}
 #' }
+#' @examples
+#' # Load the dataset
+#' data("chatGPT_news1")
+#'
+#' # View the first 6 rows of the dataset
+#' head(chatGPT_news1)
+#'
 "chatGPT_news1"

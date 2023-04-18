@@ -8,22 +8,22 @@ knitr::opts_chunk$set(echo = TRUE)
 #  library(bitToken2)
 
 ## ---- eval=F------------------------------------------------------------------
-#  comma_counts <- bitToken_count(chatGPT_news1, "title", pattern = ",")
+#  apple_counts <- bitToken_count(chatGPT_news1, "title", pattern = "(?i)apple")
 
 ## ---- eval=F------------------------------------------------------------------
 #  ordered_tokens <- bitToken_order(chatGPT_news1, "title", 1)
 
 ## ---- eval=F------------------------------------------------------------------
-#  bitToken_viz(chatGPT_news1, "title", type = "boxplot", rm_outliers = TRUE, info = TRUE)
+#  bitToken_viz(chatGPT_news1, "title", type = "boxplot", rm_outliers = TRUE)
 
 ## ---- eval=F------------------------------------------------------------------
 #  bitToken_viz(chatGPT_news1, "title", type = "histogram", info = TRUE)
 
 ## ---- eval=F------------------------------------------------------------------
-#  rows_with_min_tokens <- bitToken_min(chatGPT_news1, "title", min_tokens = 5, value = FALSE)
+#  rows_with_min_tokens <- bitToken_min(chatGPT_news1, "title", min_tokens = 7)
 
 ## ---- eval=F------------------------------------------------------------------
-#  rows_with_min_tokens_values <- bitToken_min(chatGPT_news1, "title", min_tokens = 5, value = TRUE)
+#  rows_with_min_tokens_values <- bitToken_min(chatGPT_news1, "title", min_tokens = 7, value = TRUE)
 
 ## ---- eval=F------------------------------------------------------------------
 #  
