@@ -27,11 +27,11 @@ tokens <- bitToken(chatGPT_news1, "title")
 head(tokens)
 
 # recommened step by step: bitToken_check(), bitToken_info(), bitToken_viz(), bitToken()
-bitToken_check(example)
+example(bitToken_check)
 
-bitToken_info(chatGPT_news1, "title"", add=TRUE)
+bitToken_info(chatGPT_news1, "title", add=TRUE)
 
-bitToken_viz(chatGPT_news1, "title"", type="histogram")
+bitToken_viz(chatGPT_news1, "title", type="histogram")
 
 # Multi-core support functions
 
@@ -41,7 +41,7 @@ bitToken_m(chatGPT_news1, "title")
 # Extract Token in Descending Order by Frequency with Multi-Core Support
 bitToken_info_m(chatGPT_news1, "title")
 
-bitToken_viz_m(chatGPT_news1, "title", info = TRUEE)
+bitToken_viz_m(chatGPT_news1, "title", info = TRUE)
 ```
 
 ## **License**
