@@ -1,10 +1,8 @@
-#' Visualize Token Information for Character Vectors
+#' Visualize Token Information for Character Vectors (Multicore)
 #'
 #' This function takes in a character vector or a list of character vectors and generates
 #' a plot of their token information. The default plot type is a boxplot, but a histogram
 #' plot is also available.
-#'
-#' @import graphics
 #'
 #' @param data A data frame.
 #' @param text_column The name of the column that contains the text data.
@@ -18,32 +16,39 @@
 #' @param plot_title An optional character string for the plot title.
 #' The default value is "Token Information Visualization".
 #' @param use_p A logical value. If \code{FALSE}, the function will not use the 'use_p' argument in its calculations. Default is \code{TRUE}.
+#' @param num_cores The number of cores to use for parallel processing.
+#' By default, it is set to the number of available cores detected by \code{parallel::detectCores()}.
+#' However, the number of cores used is limited to half of the total available cores.
 #'
 #' @return A plot of the token information for the input character vectors.
 #'
 #' @examples
-#' bitToken_viz_m(chatGPT_news1, "title", rm_outliers = TRUE, info = TRUE, use_p = FALSE)
-#' bitToken_viz_m(chatGPT_news1, "title", type = "histogram", info = TRUE, use_p = FALSE)
+#' bitToken_viz_m(chatGPT_news1, "title", rm_outliers = TRUE, info = TRUE, num_cores = 2)
+#' bitToken_viz_m(chatGPT_news1, "title", type = "histogram", info = TRUE, num_cores = 2)
 #'
 #' @export
-bitToken_viz_m <- function(data, text_column, type = "boxplot", round = FALSE, rm_outliers = FALSE, info = FALSE, use_p = TRUE, plot_title = "Token Information Visualization") {
+#' @import graphics parallel
+bitToken_viz_m <- function(data, text_column, type = "boxplot", round = FALSE, rm_outliers = FALSE, info = FALSE, use_p = TRUE, plot_title = "Token Information Visualization", num_cores = parallel::detectCores()) {
   # check if input is valid
   if (!is.character(data[[text_column]])) {
     stop("Invalid input. The column must contain character data.")
   }
 
+  # Limit the number of cores to a half of the total cores
+  num_cores <- min(num_cores, parallel::detectCores() / 2)
+
   x <- data[[text_column]]
 
   # calculate token lengths using bitToken_m() or bitToken() depending on use_p
   token_lengths <- if (use_p) {
-    bitToken_m(data, text_column, lengths = TRUE)
+    bitToken_m(data, text_column, lengths = TRUE, use_p = use_p, num_cores = num_cores)
   } else {
     bitToken(data, text_column, lengths = TRUE)
   }
 
   # calculate token_info using bitToken_info_m() or bitToken_info() depending on use_p
   token_info <- if (use_p) {
-    bitToken_info_m(data, text_column)
+    bitToken_info_m(data, text_column, use_p = use_p, num_cores = num_cores)
   } else {
     bitToken_info(data, text_column)
   }

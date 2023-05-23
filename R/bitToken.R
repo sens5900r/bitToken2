@@ -29,7 +29,6 @@
 #'
 #' @keywords tokenizing text
 #' @seealso \code{\link[stringr]{str_split}} for more information on string splitting
-
 bitToken <- function(data, text_column, filter_var = NULL, filter_vals = NULL, lengths = FALSE) {
   # check that data is a data frame
   if (!is.data.frame(data)) {

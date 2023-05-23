@@ -4,7 +4,7 @@
 \alias{bitToken_count}
 \title{Token Count}
 \usage{
-bitToken_count(data, text_column, pattern, location = FALSE, sum_info = FALSE)
+bitToken_count(data, text_column, pattern, location = NULL, sum_info = FALSE)
 }
 \arguments{
 \item{data}{A data frame containing the text data.}
@@ -28,6 +28,7 @@ A list or a numeric vector with the count of occurrences of the specific charact
 Count the occurrences of a specific character or string in each row of the specified text column in a data frame.
 }
 \examples{
+data(chatGPT_news1, package="bitToken2")
 chatGPT_news1$comma_count <- bitToken_count(chatGPT_news1, "title", pattern = ",")
 
 }

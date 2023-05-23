@@ -2,7 +2,7 @@
 % Please edit documentation in R/bitToken_viz_m.R
 \name{bitToken_viz_m}
 \alias{bitToken_viz_m}
-\title{Visualize Token Information for Character Vectors}
+\title{Visualize Token Information for Character Vectors (Multicore)}
 \usage{
 bitToken_viz_m(
   data,
@@ -12,7 +12,8 @@ bitToken_viz_m(
   rm_outliers = FALSE,
   info = FALSE,
   use_p = TRUE,
-  plot_title = "Token Information Visualization"
+  plot_title = "Token Information Visualization",
+  num_cores = parallel::detectCores()
 )
 }
 \arguments{
@@ -35,6 +36,10 @@ The default value is FALSE.}
 
 \item{plot_title}{An optional character string for the plot title.
 The default value is "Token Information Visualization".}
+
+\item{num_cores}{The number of cores to use for parallel processing.
+By default, it is set to the number of available cores detected by \code{parallel::detectCores()}.
+However, the number of cores used is limited to half of the total available cores.}
 }
 \value{
 A plot of the token information for the input character vectors.
@@ -45,7 +50,7 @@ a plot of their token information. The default plot type is a boxplot, but a his
 plot is also available.
 }
 \examples{
-bitToken_viz_m(chatGPT_news1, "title", rm_outliers = TRUE, info = TRUE, use_p = FALSE)
-bitToken_viz_m(chatGPT_news1, "title", type = "histogram", info = TRUE, use_p = FALSE)
+bitToken_viz_m(chatGPT_news1, "title", rm_outliers = TRUE, info = TRUE, num_cores = 2)
+bitToken_viz_m(chatGPT_news1, "title", type = "histogram", info = TRUE, num_cores = 2)
 
 }

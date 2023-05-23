@@ -1,3 +1,10 @@
+bitToken2 0.4.2
+
+Fixes were made to the README.md
+* bitToken_search() function added for filtering rows based on a specific pattern's occurrence at a specified location in a text column.
+* bitToken_location() function added to identify the locations of a specific pattern within a text column of a data frame.
+Added multi-core support to bitToken_search_m(), bitToken_location_m()
+
 bitToken2 0.4.1
 
 Added legend to bitToken_viz() and bitToken_viz_m() functions to display information about median and mean

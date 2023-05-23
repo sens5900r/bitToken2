@@ -15,11 +15,12 @@
 #' @return A list or a numeric vector with the count of occurrences of the specific character or string for each row, and additional information based on the user options.
 #'
 #' @examples
+#' data(chatGPT_news1, package="bitToken2")
 #' chatGPT_news1$comma_count <- bitToken_count(chatGPT_news1, "title", pattern = ",")
 #'
 #' @export
 #' @import stringr
-bitToken_count <- function(data, text_column, pattern, location = FALSE, sum_info = FALSE) {
+bitToken_count <- function(data, text_column, pattern, location = NULL, sum_info = FALSE) {
   # check if input is valid
   if (!is.data.frame(data)) {
     stop("Invalid input. The input must be a data frame.")
@@ -34,14 +35,18 @@ bitToken_count <- function(data, text_column, pattern, location = FALSE, sum_inf
   # count occurrences of the specific character or string in each row
   counts <- stringr::str_count(data[[text_column]], pattern)
 
-  if (location) {
-    tokens <- stringr::str_split(data[[text_column]], "\\s+")
+  tokens <- stringr::str_split(data[[text_column]], "\\s+")
+
+  if (is.null(location)) {
     positions <- lapply(tokens, function(token_list) {
-      match_positions <- which(grepl(pattern, token_list, fixed = TRUE))
-      if (length(match_positions) == 0) {
-        return(0)
+      return(any(grepl(pattern, token_list, fixed = TRUE)))
+    })
+  } else {
+    positions <- lapply(tokens, function(token_list) {
+      if (length(token_list) >= location) {
+        return(grepl(pattern, token_list[location], fixed = TRUE))
       } else {
-        return(match_positions)
+        return(FALSE)
       }
     })
   }
@@ -53,13 +58,9 @@ bitToken_count <- function(data, text_column, pattern, location = FALSE, sum_inf
   }
 
   # return output based on user options
-  if (location && sum_info) {
+  if (sum_info) {
     return(list(title = title, counts = counts, positions = positions, summary = summary_info, frequency_table = freq_table))
-  } else if (location) {
-    return(list(counts = counts, positions = positions))
-  } else if (sum_info) {
-    return(list(title = title, counts = counts, summary = summary_info, frequency_table = freq_table))
   } else {
-    return(counts)
+    return(list(counts = counts, positions = positions))
   }
 }

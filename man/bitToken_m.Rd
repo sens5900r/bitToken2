@@ -2,7 +2,7 @@
 % Please edit documentation in R/bitToken_m.R
 \name{bitToken_m}
 \alias{bitToken_m}
-\title{Tokenize text data in a data frame}
+\title{Tokenize text data in a data frame (Multicore)}
 \usage{
 bitToken_m(
   data,
@@ -10,7 +10,8 @@ bitToken_m(
   filter_var = NULL,
   filter_vals = NULL,
   lengths = FALSE,
-  use_p = TRUE
+  use_p = TRUE,
+  num_cores = parallel::detectCores()
 )
 }
 \arguments{
@@ -25,6 +26,10 @@ bitToken_m(
 \item{lengths}{A logical value indicating whether to return the lengths of the tokens (default = FALSE)}
 
 \item{use_p}{A logical value. If \code{FALSE}, the function will not use the 'use_p' argument in its calculations. Default is \code{TRUE}.}
+
+\item{num_cores}{The number of cores to use for parallel processing.
+By default, it is set to the number of available cores detected by \code{parallel::detectCores()}.
+However, the number of cores used is limited to half of the total available cores.}
 }
 \value{
 A list of token vectors or a vector of token lengths

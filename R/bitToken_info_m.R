@@ -1,4 +1,4 @@
-#' Token Information
+#' Token Information (Multicore)
 #'
 #' Get information about the number of tokens in a character vector or list of character vectors.
 #'
@@ -8,6 +8,7 @@
 #' @param min_t The minimum number of tokens to consider for summary statistics.
 #' @param max_t The maximum number of tokens to consider for summary statistics.
 #' @param use_p A logical value. If \code{FALSE}, the function will not use the 'use_p' argument in its calculations. Default is \code{TRUE}.
+#' @param num_cores The number of cores to be used for parallel processing. The default is the half of the total number of cores available in the system.
 #'
 #' @return A named numeric vector with the minimum, median, mode, and maximum number of tokens.
 #'
@@ -17,17 +18,14 @@
 #' bitToken_info_m(chatGPT_news1, "title", min_t = 3, max_t = 10, add = TRUE, use_p = FALSE)
 #'
 #' @export
-bitToken_info_m <- function(data, text_column, add = FALSE, min_t = 1, max_t = Inf, use_p = TRUE) {
+bitToken_info_m <- function(data, text_column, add = FALSE, min_t = 1, max_t = Inf, use_p = TRUE, num_cores = parallel::detectCores()) {
   # check if input is valid
   if (!is.character(data[[text_column]]) && !is.list(data[[text_column]])) {
     stop("Invalid input. The input must be a character vector or a list of character vectors.")
   }
 
-  # Get the number of available cores
-  num_cores <- parallel::detectCores()
-
-  # Limit the number of cores to a maximum of 8
-  num_cores <- min(num_cores, 8)
+  # Limit the number of cores to a half of the total cores
+  num_cores <- min(num_cores, parallel::detectCores() / 2)
 
   # Function to tokenize text
   tokenize_text <- function(text) stringr::str_split(text, "\\s+")

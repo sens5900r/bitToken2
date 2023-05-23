@@ -2,9 +2,15 @@
 % Please edit documentation in R/bitToken_order_m.R
 \name{bitToken_order_m}
 \alias{bitToken_order_m}
-\title{Get Tokens in Descending Order by Frequency}
+\title{Get Tokens in Descending Order by Frequency (Multicore)}
 \usage{
-bitToken_order_m(data, text_column, token_num, use_p = TRUE)
+bitToken_order_m(
+  data,
+  text_column,
+  token_num,
+  use_p = TRUE,
+  num_cores = parallel::detectCores()
+)
 }
 \arguments{
 \item{data}{A data frame containing the text column.}
@@ -14,6 +20,8 @@ bitToken_order_m(data, text_column, token_num, use_p = TRUE)
 \item{token_num}{The index of the token to extract (starting from 1).}
 
 \item{use_p}{A logical value. If \code{FALSE}, the function will not use the 'use_p' argument in its calculations. Default is \code{TRUE}.}
+
+\item{num_cores}{The number of cores to be used for parallel processing. The default is the half of the total number of cores available in the system.}
 }
 \value{
 A data frame with two columns: "Token" and "Frequency", sorted by "Frequency" in descending order.

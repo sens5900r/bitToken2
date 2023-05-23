@@ -1,4 +1,4 @@
-#' Get Tokens in Descending Order by Frequency
+#' Get Tokens in Descending Order by Frequency (Multicore)
 #'
 #' Extracts the specified token number from a column of text strings and returns a vector
 #' of the tokens in descending order by their frequency.
@@ -7,6 +7,7 @@
 #' @param text_column The name of the column containing the text strings.
 #' @param token_num The index of the token to extract (starting from 1).
 #' @param use_p A logical value. If \code{FALSE}, the function will not use the 'use_p' argument in its calculations. Default is \code{TRUE}.
+#' @param num_cores The number of cores to be used for parallel processing. The default is the half of the total number of cores available in the system.
 #' @return A data frame with two columns: "Token" and "Frequency", sorted by "Frequency" in descending order.
 #'
 #' @importFrom stringr str_split
@@ -16,12 +17,12 @@
 #' bitToken_order_m(chatGPT_news1, "title", 1, use_p = FALSE)
 #'
 #' @export
-bitToken_order_m <- function(data, text_column, token_num, use_p = TRUE) {
+bitToken_order_m <- function(data, text_column, token_num, use_p = TRUE, num_cores = parallel::detectCores()) {
   # Get the number of available cores
-  num_cores <- parallel::detectCores()
+
 
   # Limit the number of cores to a maximum of 8
-  num_cores <- min(num_cores, 8)
+  num_cores <- min(num_cores, parallel::detectCores() / 2)
 
   # Function to extract tokens
   extract_tokens <- function(df, col) {

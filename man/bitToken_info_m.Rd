@@ -2,7 +2,7 @@
 % Please edit documentation in R/bitToken_info_m.R
 \name{bitToken_info_m}
 \alias{bitToken_info_m}
-\title{Token Information}
+\title{Token Information (Multicore)}
 \usage{
 bitToken_info_m(
   data,
@@ -10,7 +10,8 @@ bitToken_info_m(
   add = FALSE,
   min_t = 1,
   max_t = Inf,
-  use_p = TRUE
+  use_p = TRUE,
+  num_cores = parallel::detectCores()
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ bitToken_info_m(
 \item{max_t}{The maximum number of tokens to consider for summary statistics.}
 
 \item{use_p}{A logical value. If \code{FALSE}, the function will not use the 'use_p' argument in its calculations. Default is \code{TRUE}.}
+
+\item{num_cores}{The number of cores to be used for parallel processing. The default is the half of the total number of cores available in the system.}
 }
 \value{
 A named numeric vector with the minimum, median, mode, and maximum number of tokens.
