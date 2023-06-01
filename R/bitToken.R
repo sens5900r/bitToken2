@@ -31,23 +31,16 @@
 #' @seealso \code{\link[stringr]{str_split}} for more information on string splitting
 bitToken <- function(data, text_column, filter_var = NULL, filter_vals = NULL, lengths = FALSE) {
   # check that data is a data frame
-  if (!is.data.frame(data)) {
-    stop("Error: 'data' must be a data frame.")
-  }
+  stopifnot(is.data.frame(data))
 
   # check that text_column is a valid column name in the data frame
-  if (!text_column %in% names(data)) {
-    stop(paste("Error: '", text_column, "' is not a valid column name in the data frame.", sep = ""))
-  }
+  stopifnot(text_column %in% names(data))
 
   # check that text_column contains text data
-  if (!is.character(data[[text_column]]) && !is.factor(data[[text_column]])) {
-    stop(paste("Error: '", text_column, "' does not contain text data. Please provide a column that contains character or factor data.", sep = ""))
-  }
+  stopifnot(is.character(data[[text_column]]) || is.factor(data[[text_column]]))
 
   if (!is.null(filter_var) & !is.null(filter_vals)) {
-    filter_expr <- rlang::expr(!!rlang::sym(filter_var) %in% !!filter_vals)
-    data <- dplyr::filter(data, !!filter_expr)
+    data <- dplyr::filter(data, !!rlang::sym(filter_var) %in% !!filter_vals)
   }
 
   # tokenize the text column by splitting on whitespace

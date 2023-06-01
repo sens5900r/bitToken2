@@ -9,6 +9,9 @@
 #'   - Case sensitivity: By default, the function is case sensitive. Use (?i) within the pattern to make it case insensitive.
 #'   - Regular expressions: The function uses regular expressions, so escape special characters (e.g., . or *) with a backslash (\\).
 #'   - Spaces and whitespace: Include the exact whitespace character in the pattern, such as regular spaces or tabs, or use \\s to represent any whitespace.
+#' @param another_column A string specifying the name of the column in the input data from which to return the output.
+#' If not specified, the function will return the output from the specified text_column.
+#'
 #' @param location A numeric value indicating the position of tokens to consider when filtering. Default is NULL, indicating all tokens are considered.
 #'
 #' @return A character vector with the filtered values from the specified text column.
@@ -16,10 +19,10 @@
 #' @examples
 #' # Search for 'COVID' at second position in titles
 #' titles_with_COVID <- bitToken_search(chatGPT_news1, "title", "COVID", location=2)
-#' 
+#'
 #' @export
 #' @import stringr
-bitToken_search <- function(data, text_column, pattern, location = NULL) {
+bitToken_search <- function(data, text_column, pattern, another_column = NULL, location = NULL) {
   # check if input is valid
   if (!is.data.frame(data)) {
     stop("Invalid input. The input must be a data frame.")
@@ -27,9 +30,12 @@ bitToken_search <- function(data, text_column, pattern, location = NULL) {
   if (!text_column %in% names(data)) {
     stop(paste("Error: '", text_column, "' is not a valid column name in the data frame.", sep = ""))
   }
-  
+  if (!is.null(another_column) && !another_column %in% names(data)) {
+    stop(paste("Error: '", another_column, "' is not a valid column name in the data frame.", sep = ""))
+  }
+
   tokens <- stringr::str_split(data[[text_column]], "\\s+")
-  
+
   if (is.null(location)) {
     positions <- lapply(tokens, function(token_list) {
       return(any(grepl(pattern, token_list, fixed = TRUE)))
@@ -43,9 +49,14 @@ bitToken_search <- function(data, text_column, pattern, location = NULL) {
       }
     })
   }
-  
+
+  # if another_column is not specified, use text_column
+  if (is.null(another_column)) {
+    another_column <- text_column
+  }
+
   # Extract the positions where the condition is true
-  filtered_data <- data[unlist(positions), text_column]
-  
+  filtered_data <- data[unlist(positions), another_column]
+
   return(filtered_data)
 }

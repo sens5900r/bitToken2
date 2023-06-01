@@ -2,9 +2,9 @@
 % Please edit documentation in R/bitToken_min.R
 \name{bitToken_min}
 \alias{bitToken_min}
-\title{Calculate the number of tokens in a given text column and find rows with at least a specified number of tokens}
+\title{Calculate the number of tokens in a given text column and find rows with at least a specified number of tokens and not more than a maximum number}
 \usage{
-bitToken_min(data, col_name, min_tokens = 3, value = FALSE)
+bitToken_min(data, col_name, min_tokens = 3, max_tokens = NULL, value = FALSE)
 }
 \arguments{
 \item{data}{a dataframe}
@@ -13,15 +13,17 @@ bitToken_min(data, col_name, min_tokens = 3, value = FALSE)
 
 \item{min_tokens}{the minimum number of tokens expected in the text column (default = 3)}
 
+\item{max_tokens}{the maximum number of tokens expected in the text column (default = NULL)}
+
 \item{value}{a boolean value. If TRUE, the function returns the actual row values instead of the row indices (default = FALSE)}
 }
 \value{
 A vector of either the row indices or the actual row values based on the 'value' option
 }
 \description{
-This function takes in a dataframe, the name of the text column and the minimum number of tokens expected in the text column. It returns either the row indices or the actual row values based on the 'value' option
+This function takes in a dataframe, the name of the text column, the minimum number of tokens and maximum number of tokens expected in the text column. It returns either the row indices or the actual row values based on the 'value' option
 }
 \examples{
-tokens5_plus <- bitToken_min(chatGPT_news1, "title", min_tokens = 5, value = TRUE)
+tokens5_to_7 <- bitToken_min(chatGPT_news1, "title", min_tokens = 5, max_tokens = 7, value = TRUE)
 
 }

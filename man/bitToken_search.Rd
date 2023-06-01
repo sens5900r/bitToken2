@@ -4,7 +4,13 @@
 \alias{bitToken_search}
 \title{Token Search}
 \usage{
-bitToken_search(data, text_column, pattern, location = NULL)
+bitToken_search(
+  data,
+  text_column,
+  pattern,
+  another_column = NULL,
+  location = NULL
+)
 }
 \arguments{
 \item{data}{A data frame containing the text data.}
@@ -16,6 +22,9 @@ Note the following when using the pattern argument:
 - Case sensitivity: By default, the function is case sensitive. Use (?i) within the pattern to make it case insensitive.
 - Regular expressions: The function uses regular expressions, so escape special characters (e.g., . or *) with a backslash (\\).
 - Spaces and whitespace: Include the exact whitespace character in the pattern, such as regular spaces or tabs, or use \\s to represent any whitespace.}
+
+\item{another_column}{A string specifying the name of the column in the input data from which to return the output.
+If not specified, the function will return the output from the specified text_column.}
 
 \item{location}{A numeric value indicating the position of tokens to consider when filtering. Default is NULL, indicating all tokens are considered.}
 }

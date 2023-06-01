@@ -9,7 +9,9 @@
 #'   - Case sensitivity: By default, the function is case sensitive. Use (?i) within the pattern to make it case insensitive.
 #'   - Regular expressions: The function uses regular expressions, so escape special characters (e.g., . or *) with a backslash (\\).
 #'   - Spaces and whitespace: Include the exact whitespace character in the pattern, such as regular spaces or tabs, or use \\s to represent any whitespace.
-#' @param location A boolean flag indicating whether to return the positions of tokens containing the specific pattern. Default is FALSE.
+#' @param location A numeric value indicating the position of tokens to consider when counting. If specified,
+#' the function checks whether the pattern appears at the given token position in each row. Default is NULL,
+#' indicating all tokens are considered.
 #' @param sum_info A boolean flag indicating whether to return summary information and frequency table for counts. Default is FALSE.
 #'
 #' @return A list or a numeric vector with the count of occurrences of the specific character or string for each row, and additional information based on the user options.
@@ -29,26 +31,28 @@ bitToken_count <- function(data, text_column, pattern, location = NULL, sum_info
     stop(paste("Error: '", text_column, "' is not a valid column name in the data frame.", sep = ""))
   }
 
-  # extract the data frame name
   data_name <- deparse(substitute(data))
-
-  # count occurrences of the specific character or string in each row
-  counts <- stringr::str_count(data[[text_column]], pattern)
 
   tokens <- stringr::str_split(data[[text_column]], "\\s+")
 
   if (is.null(location)) {
-    positions <- lapply(tokens, function(token_list) {
-      return(any(grepl(pattern, token_list, fixed = TRUE)))
-    })
+    counts <- vapply(tokens, function(token_list) sum(grepl(pattern, token_list, fixed = TRUE)), numeric(1))
+    positions <- vapply(tokens, function(token_list) any(grepl(pattern, token_list, fixed = TRUE)), logical(1))
   } else {
-    positions <- lapply(tokens, function(token_list) {
+    counts <- vapply(tokens, function(token_list) {
       if (length(token_list) >= location) {
-        return(grepl(pattern, token_list[location], fixed = TRUE))
+        sum(grepl(pattern, token_list[location], fixed = TRUE))
       } else {
-        return(FALSE)
+        0
       }
-    })
+    }, numeric(1))
+    positions <- vapply(tokens, function(token_list) {
+      if (length(token_list) >= location) {
+        grepl(pattern, token_list[location], fixed = TRUE)
+      } else {
+        FALSE
+      }
+    }, logical(1))
   }
 
   if (sum_info) {
@@ -57,7 +61,6 @@ bitToken_count <- function(data, text_column, pattern, location = NULL, sum_info
     title <- paste("Summary for pattern '", pattern, "' in column '", text_column, "'", "in dataset, ", data_name, sep = "")
   }
 
-  # return output based on user options
   if (sum_info) {
     return(list(title = title, counts = counts, positions = positions, summary = summary_info, frequency_table = freq_table))
   } else {

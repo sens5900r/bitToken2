@@ -2,12 +2,13 @@
 % Please edit documentation in R/bitToken_min_m.R
 \name{bitToken_min_m}
 \alias{bitToken_min_m}
-\title{Calculate the number of tokens in a given text column and find rows with at least a specified number of tokens (Multicore)}
+\title{Calculate the number of tokens in a given text column and find rows with at least a specified number of tokens and not more than a maximum number (Multicore)}
 \usage{
 bitToken_min_m(
   data,
   col_name,
   min_tokens = 3,
+  max_tokens = NULL,
   value = FALSE,
   use_p = TRUE,
   num_cores = parallel::detectCores()
@@ -19,6 +20,8 @@ bitToken_min_m(
 \item{col_name}{the name of the text column}
 
 \item{min_tokens}{the minimum number of tokens expected in the text column (default = 3)}
+
+\item{max_tokens}{the maximum number of tokens expected in the text column (default = NULL)}
 
 \item{value}{a boolean value. If TRUE, the function returns the actual row values instead of the row indices (default = FALSE)}
 
@@ -33,6 +36,6 @@ A vector of either the row indices or the actual row values based on the 'value'
 This function takes in a dataframe, the name of the text column and the minimum number of tokens expected in the text column. It returns either the row indices or the actual row values based on the 'value' option
 }
 \examples{
-tokens5_plus <- bitToken_min_m(chatGPT_news1, "title", min_tokens = 5, value = TRUE, use_p = FALSE)
+tokens5_to_7 <- bitToken_min_m(chatGPT_news1, "title", min_tokens = 5, max_tokens = 7, value = TRUE, use_p = FALSE)
 
 }

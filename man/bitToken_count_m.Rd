@@ -24,7 +24,9 @@ Note the following when using the pattern argument:
 - Regular expressions: The function uses regular expressions, so escape special characters (e.g., . or *) with a backslash (\\).
 - Spaces and whitespace: Include the exact whitespace character in the pattern, such as regular spaces or tabs, or use \\s to represent any whitespace.}
 
-\item{location}{A numeric value indicating the position of tokens to consider when filtering. Default is NULL, indicating all tokens are considered.}
+\item{location}{A numeric value indicating the position of tokens to consider when counting. If specified,
+the function checks whether the pattern appears at the given token position in each row. Default is NULL,
+indicating all tokens are considered.}
 
 \item{sum_info}{A boolean flag indicating whether to return summary information and frequency table for counts. Default is FALSE.}
 

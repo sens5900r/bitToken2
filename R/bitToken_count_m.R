@@ -9,7 +9,9 @@
 #'   - Case sensitivity: By default, the function is case sensitive. Use (?i) within the pattern to make it case insensitive.
 #'   - Regular expressions: The function uses regular expressions, so escape special characters (e.g., . or *) with a backslash (\\).
 #'   - Spaces and whitespace: Include the exact whitespace character in the pattern, such as regular spaces or tabs, or use \\s to represent any whitespace.
-#' @param location A numeric value indicating the position of tokens to consider when filtering. Default is NULL, indicating all tokens are considered.
+#' @param location A numeric value indicating the position of tokens to consider when counting. If specified,
+#' the function checks whether the pattern appears at the given token position in each row. Default is NULL,
+#' indicating all tokens are considered.
 #' @param sum_info A boolean flag indicating whether to return summary information and frequency table for counts. Default is FALSE.
 #' @param num_cores The number of cores to be used for parallel processing. The default is the half of the total number of cores available in the system.
 #'
@@ -22,7 +24,6 @@
 #' @export
 #' @import stringr parallel
 bitToken_count_m <- function(data, text_column, pattern, location = NULL, sum_info = FALSE, num_cores = parallel::detectCores()) {
-  # check if input is valid
   if (!is.data.frame(data)) {
     stop("Invalid input. The input must be a data frame.")
   }
@@ -30,30 +31,31 @@ bitToken_count_m <- function(data, text_column, pattern, location = NULL, sum_in
     stop(paste("Error: '", text_column, "' is not a valid column name in the data frame.", sep = ""))
   }
 
-  # extract the data frame name
   data_name <- deparse(substitute(data))
 
   # Limit the number of cores to a half of the total cores
   num_cores <- min(num_cores, parallel::detectCores() / 2)
 
-  # count occurrences of the specific character or string in each row
-  counts <- parallel::mclapply(data[[text_column]], stringr::str_count, pattern = pattern, mc.cores = num_cores)
-
-  # split texts into tokens
   tokens <- parallel::mclapply(data[[text_column]], stringr::str_split, pattern = "\\s+", mc.cores = num_cores)
 
   if (is.null(location)) {
-    positions <- lapply(tokens, function(token_list) {
-      return(any(grepl(pattern, unlist(token_list), fixed = TRUE)))
-    })
+    counts <- parallel::mclapply(tokens, function(token_list) sum(grepl(pattern, unlist(token_list), fixed = TRUE)), mc.cores = num_cores)
+    positions <- parallel::mclapply(tokens, function(token_list) any(grepl(pattern, unlist(token_list), fixed = TRUE)), mc.cores = num_cores)
   } else {
-    positions <- lapply(tokens, function(token_list) {
+    counts <- parallel::mclapply(tokens, function(token_list) {
       if (length(unlist(token_list)) >= location) {
-        return(grepl(pattern, unlist(token_list)[location], fixed = TRUE))
+        sum(grepl(pattern, unlist(token_list)[location], fixed = TRUE))
       } else {
-        return(FALSE)
+        0
       }
-    })
+    }, mc.cores = num_cores)
+    positions <- parallel::mclapply(tokens, function(token_list) {
+      if (length(unlist(token_list)) >= location) {
+        grepl(pattern, unlist(token_list)[location], fixed = TRUE)
+      } else {
+        FALSE
+      }
+    }, mc.cores = num_cores)
   }
 
   if (sum_info) {
@@ -62,7 +64,6 @@ bitToken_count_m <- function(data, text_column, pattern, location = NULL, sum_in
     title <- paste("Summary for pattern '", pattern, "' in column '", text_column, "'", "in dataset, ", data_name, sep = "")
   }
 
-  # return output based on user options
   if (sum_info) {
     return(list(title = title, counts = unlist(counts), positions = unlist(positions), summary = summary_info, frequency_table = freq_table))
   } else {
