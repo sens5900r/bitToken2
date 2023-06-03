@@ -36,12 +36,11 @@ bitToken_count_m <- function(data, text_column, pattern, location = NULL, sum_in
   # Limit the number of cores to a half of the total cores
   num_cores <- min(num_cores, parallel::detectCores() / 2)
 
-  tokens <- parallel::mclapply(data[[text_column]], stringr::str_split, pattern = "\\s+", mc.cores = num_cores)
-
   if (is.null(location)) {
-    counts <- parallel::mclapply(tokens, function(token_list) sum(grepl(pattern, unlist(token_list), fixed = TRUE)), mc.cores = num_cores)
-    positions <- parallel::mclapply(tokens, function(token_list) any(grepl(pattern, unlist(token_list), fixed = TRUE)), mc.cores = num_cores)
+    counts <- parallel::mclapply(data[[text_column]], stringr::str_count, pattern = pattern, mc.cores = num_cores)
   } else {
+    tokens <- parallel::mclapply(data[[text_column]], stringr::str_split, pattern = "\\s+", mc.cores = num_cores)
+
     counts <- parallel::mclapply(tokens, function(token_list) {
       if (length(unlist(token_list)) >= location) {
         sum(grepl(pattern, unlist(token_list)[location], fixed = TRUE))
@@ -49,24 +48,17 @@ bitToken_count_m <- function(data, text_column, pattern, location = NULL, sum_in
         0
       }
     }, mc.cores = num_cores)
-    positions <- parallel::mclapply(tokens, function(token_list) {
-      if (length(unlist(token_list)) >= location) {
-        grepl(pattern, unlist(token_list)[location], fixed = TRUE)
-      } else {
-        FALSE
-      }
-    }, mc.cores = num_cores)
   }
 
+  # Unlist the results
+  counts <- unlist(counts)
+
   if (sum_info) {
-    summary_info <- summary(unlist(counts))
-    freq_table <- sort(table(unlist(counts)), decreasing = TRUE)
+    summary_info <- summary(counts)
+    freq_table <- sort(table(counts), decreasing = TRUE)
     title <- paste("Summary for pattern '", pattern, "' in column '", text_column, "'", "in dataset, ", data_name, sep = "")
-  }
-
-  if (sum_info) {
-    return(list(title = title, counts = unlist(counts), positions = unlist(positions), summary = summary_info, frequency_table = freq_table))
+    return(list(title = title, counts = counts, summary = summary_info, frequency_table = freq_table))
   } else {
-    return(list(counts = unlist(counts), positions = unlist(positions)))
+    return(counts)
   }
 }

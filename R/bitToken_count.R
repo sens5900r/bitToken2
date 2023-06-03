@@ -33,12 +33,10 @@ bitToken_count <- function(data, text_column, pattern, location = NULL, sum_info
 
   data_name <- deparse(substitute(data))
 
-  tokens <- stringr::str_split(data[[text_column]], "\\s+")
-
   if (is.null(location)) {
-    counts <- vapply(tokens, function(token_list) sum(grepl(pattern, token_list, fixed = TRUE)), numeric(1))
-    positions <- vapply(tokens, function(token_list) any(grepl(pattern, token_list, fixed = TRUE)), logical(1))
+    counts <- stringr::str_count(data[[text_column]], pattern)
   } else {
+    tokens <- stringr::str_split(data[[text_column]], "\\s+")
     counts <- vapply(tokens, function(token_list) {
       if (length(token_list) >= location) {
         sum(grepl(pattern, token_list[location], fixed = TRUE))
@@ -46,24 +44,14 @@ bitToken_count <- function(data, text_column, pattern, location = NULL, sum_info
         0
       }
     }, numeric(1))
-    positions <- vapply(tokens, function(token_list) {
-      if (length(token_list) >= location) {
-        grepl(pattern, token_list[location], fixed = TRUE)
-      } else {
-        FALSE
-      }
-    }, logical(1))
   }
 
   if (sum_info) {
     summary_info <- summary(counts)
     freq_table <- sort(table(counts), decreasing = TRUE)
     title <- paste("Summary for pattern '", pattern, "' in column '", text_column, "'", "in dataset, ", data_name, sep = "")
-  }
-
-  if (sum_info) {
-    return(list(title = title, counts = counts, positions = positions, summary = summary_info, frequency_table = freq_table))
+    return(list(title = title, counts = counts, summary = summary_info, frequency_table = freq_table))
   } else {
-    return(list(counts = counts, positions = positions))
+    return(counts)
   }
 }
