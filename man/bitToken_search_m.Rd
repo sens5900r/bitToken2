@@ -10,7 +10,6 @@ bitToken_search_m(
   pattern,
   another_column = NULL,
   location = NULL,
-  use_p = TRUE,
   num_cores = parallel::detectCores()
 )
 }
@@ -30,8 +29,6 @@ If not specified, the function will return the output from the specified text_co
 
 \item{location}{A numeric value indicating the position of tokens to consider when filtering. Default is NULL, indicating all tokens are considered.}
 
-\item{use_p}{A logical value. If \code{FALSE}, the function will not use the 'use_p' argument in its calculations. Default is \code{TRUE}.}
-
 \item{num_cores}{The number of cores to use for parallel processing.
 By default, it is set to the number of available cores detected by \code{parallel::detectCores()}.
 However, the number of cores used is limited to half of the total available cores.}
@@ -45,5 +42,5 @@ This function leverages multiple cores for parallel execution.
 }
 \examples{
 # Search for 'COVID' at second position in titles using multiple cores
-titles_with_COVID <- bitToken_search_m(chatGPT_news1, "title", "COVID", location=2, num_cores = 2)
+titles_COVID <- bitToken_search_m(chatGPT_news1, "title", "COVID", location=2, num_cores=2)
 }

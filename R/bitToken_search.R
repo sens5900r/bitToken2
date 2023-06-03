@@ -34,14 +34,11 @@ bitToken_search <- function(data, text_column, pattern, another_column = NULL, l
     stop(paste("Error: '", another_column, "' is not a valid column name in the data frame.", sep = ""))
   }
 
-  tokens <- stringr::str_split(data[[text_column]], "\\s+")
-
   if (is.null(location)) {
-    positions <- lapply(tokens, function(token_list) {
-      return(any(grepl(pattern, token_list, fixed = TRUE)))
-    })
+    positions <- stringr::str_detect(data[[text_column]], pattern)
   } else {
-    positions <- lapply(tokens, function(token_list) {
+    tokens <- stringr::str_split(data[[text_column]], "\\s+")
+    positions <- sapply(tokens, function(token_list) {
       if (length(token_list) >= location) {
         return(grepl(pattern, token_list[location], fixed = TRUE))
       } else {
@@ -56,7 +53,7 @@ bitToken_search <- function(data, text_column, pattern, another_column = NULL, l
   }
 
   # Extract the positions where the condition is true
-  filtered_data <- data[unlist(positions), another_column]
+  filtered_data <- data[positions, another_column]
 
   return(filtered_data)
 }

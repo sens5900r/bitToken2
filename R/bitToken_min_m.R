@@ -15,7 +15,10 @@
 #' @importFrom stringr str_split
 #'
 #' @examples
-#' tokens5_to_7 <- bitToken_min_m(chatGPT_news1, "title", min_tokens = 5, max_tokens = 7, value = TRUE, use_p = FALSE)
+#' tokens5_to_7 <- bitToken_min_m(
+#'                 chatGPT_news1, "title", min_tokens = 5,
+#'                 max_tokens = 7, value = TRUE, use_p = FALSE
+#'                 )
 #'
 #' @export
 bitToken_min_m <- function(data, col_name, min_tokens = 3, max_tokens = NULL, value = FALSE, use_p = TRUE, num_cores = parallel::detectCores()) {

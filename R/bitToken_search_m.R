@@ -13,18 +13,17 @@
 #' @param another_column A string specifying the name of the column in the input data from which to return the output.
 #' If not specified, the function will return the output from the specified text_column.
 #' @param location A numeric value indicating the position of tokens to consider when filtering. Default is NULL, indicating all tokens are considered.
-#' @param use_p A logical value. If \code{FALSE}, the function will not use the 'use_p' argument in its calculations. Default is \code{TRUE}.
 #' @param num_cores The number of cores to use for parallel processing.
 #' By default, it is set to the number of available cores detected by \code{parallel::detectCores()}.
 #' However, the number of cores used is limited to half of the total available cores.
 #' @return A character vector with the filtered values from the specified text column.
 #' @examples
 #' # Search for 'COVID' at second position in titles using multiple cores
-#' titles_with_COVID <- bitToken_search_m(chatGPT_news1, "title", "COVID", location=2, num_cores = 2)
+#' titles_COVID <- bitToken_search_m(chatGPT_news1, "title", "COVID", location=2, num_cores=2)
 #' @export
 #' @import stringr
 #' @import parallel
-bitToken_search_m <- function(data, text_column, pattern, another_column = NULL, location = NULL, use_p = TRUE, num_cores = parallel::detectCores()) {
+bitToken_search_m <- function(data, text_column, pattern, another_column = NULL, location = NULL, num_cores = parallel::detectCores()) {
   # check if input is valid
   if (!is.data.frame(data)) {
     stop("Invalid input. The input must be a data frame.")
@@ -39,20 +38,17 @@ bitToken_search_m <- function(data, text_column, pattern, another_column = NULL,
   # Limit the number of cores to a half of the total cores
   num_cores <- min(num_cores, parallel::detectCores() / 2)
 
-  tokens <- stringr::str_split(data[[text_column]], "\\s+")
-
   if (is.null(location)) {
-    positions <- parallel::mclapply(tokens, function(token_list) {
-      return(any(grepl(pattern, token_list, fixed = TRUE)))
-    }, mc.cores = num_cores)
+    positions <- stringr::str_detect(data[[text_column]], pattern)
   } else {
-    positions <- parallel::mclapply(tokens, function(token_list) {
+    tokens <- stringr::str_split(data[[text_column]], "\\s+")
+    positions <- unlist(parallel::mclapply(tokens, function(token_list) {
       if (length(token_list) >= location) {
         return(grepl(pattern, token_list[location], fixed = TRUE))
       } else {
         return(FALSE)
       }
-    }, mc.cores = num_cores)
+    }, mc.cores = num_cores))
   }
 
   # if another_column is not specified, use text_column
@@ -61,7 +57,7 @@ bitToken_search_m <- function(data, text_column, pattern, another_column = NULL,
   }
 
   # Extract the positions where the condition is true
-  filtered_data <- data[unlist(positions), another_column]
+  filtered_data <- data[positions, another_column]
 
   return(filtered_data)
 }

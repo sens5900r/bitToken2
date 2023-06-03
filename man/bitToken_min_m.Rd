@@ -36,6 +36,9 @@ A vector of either the row indices or the actual row values based on the 'value'
 This function takes in a dataframe, the name of the text column and the minimum number of tokens expected in the text column. It returns either the row indices or the actual row values based on the 'value' option
 }
 \examples{
-tokens5_to_7 <- bitToken_min_m(chatGPT_news1, "title", min_tokens = 5, max_tokens = 7, value = TRUE, use_p = FALSE)
+tokens5_to_7 <- bitToken_min_m(
+                chatGPT_news1, "title", min_tokens = 5,
+                max_tokens = 7, value = TRUE, use_p = FALSE
+                )
 
 }
