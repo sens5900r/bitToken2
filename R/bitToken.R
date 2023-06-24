@@ -23,32 +23,51 @@
 #'
 #' @export
 #'
-#' @import dplyr
-#' @import rlang
-#' @import stringr
-#'
-#' @keywords tokenizing text
-#' @seealso \code{\link[stringr]{str_split}} for more information on string splitting
+#' @import data.table
+#' @import stringi
 bitToken <- function(data, text_column, filter_var = NULL, filter_vals = NULL, lengths = FALSE) {
   # check that data is a data frame
-  stopifnot(is.data.frame(data))
-
-  # check that text_column is a valid column name in the data frame
-  stopifnot(text_column %in% names(data))
-
-  # check that text_column contains text data
-  stopifnot(is.character(data[[text_column]]) || is.factor(data[[text_column]]))
-
-  if (!is.null(filter_var) & !is.null(filter_vals)) {
-    data <- dplyr::filter(data, !!rlang::sym(filter_var) %in% !!filter_vals)
+  if (!is.data.frame(data)) {
+    stop("The 'data' argument must be a data frame.")
   }
-
+  
+  # check that text_column is a valid column name in the data frame
+  if (!(is.character(text_column) && text_column %in% names(data))) {
+    stop("The 'text_column' argument must be the name of a column in the 'data' data frame.")
+  }
+  
+  # convert to data.table
+  data <- data.table::as.data.table(data)
+  
+  # check that text_column contains text data
+  if (!(is.character(data[[text_column]]) || is.factor(data[[text_column]]))) {
+    stop("The specified 'text_column' must contain character or factor data.")
+  }
+  
+  # check filter_var and filter_vals, if they are provided
+  if (!is.null(filter_var)) {
+    if (!is.character(filter_var) || !filter_var %in% names(data)) {
+      stop("The 'filter_var' argument must be the name of a column in the 'data' data frame.")
+    }
+    
+    if (!is.null(filter_vals)) {
+      if (!is.vector(filter_vals)) {
+        stop("The 'filter_vals' argument must be a vector.")
+      }
+      # filter using data.table syntax
+      data <- data[get(filter_var) %in% filter_vals]
+    }
+  }
+  
   # tokenize the text column by splitting on whitespace
-  tokens <- stringr::str_split(data[[text_column]], "\\s+")
-
+  tokens <- stringi::stri_split_regex(data[[text_column]], "\\s+")
+  
   # return the tokens or lengths
   if (lengths) {
-    lengths <- as.numeric(lengths(tokens))
+    if (!is.logical(lengths)) {
+      stop("The 'lengths' argument must be a logical value.")
+    }
+    lengths <- as.numeric(vapply(tokens, length, integer(1L)))
     return(lengths)
   } else {
     return(tokens)

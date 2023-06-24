@@ -10,43 +10,55 @@
 #' @param num_cores The number of cores to be used for parallel processing. The default is the half of the total number of cores available in the system.
 #' @return A data frame with two columns: "Token" and "Frequency", sorted by "Frequency" in descending order.
 #'
-#' @importFrom stringr str_split
-#' @importFrom dplyr group_by arrange summarise
+#' @importFrom parallel mclapply detectCores
+#' @importFrom stringi stri_split_fixed
+#' @importFrom data.table data.table := .N setorder
 #'
 #' @examples
 #' bitToken_order_m(chatGPT_news1, "title", 1, use_p = FALSE)
 #'
 #' @export
-bitToken_order_m <- function(data, text_column, token_num, use_p = TRUE, num_cores = parallel::detectCores()) {
-  # Get the number of available cores
-
-
+bitToken_order_m <- function(data, text_column, token_num, use_p = TRUE, num_cores = parallel::detectCores() / 2) {
+  require(parallel)
+  require(stringi)
+  require(data.table)
+  
   # Limit the number of cores to a maximum of 8
   num_cores <- min(num_cores, parallel::detectCores() / 2)
-
+  
   # Function to extract tokens
   extract_tokens <- function(df, col) {
     strings <- df[[col]]
-    tokens <- stringr::str_split(strings, "\\s+")
-    sapply(tokens, function(x) x[token_num])
+    tokens <- stringi::stri_split_fixed(strings, " ")
+    sapply(tokens, function(x) if(length(x) >= token_num) x[token_num] else NA)
   }
-
+  
   if (use_p) {
-    # split the data frame across multiple cores
+    # Split the data frame across multiple cores
     data_splits <- split(data, rep(1:num_cores, each = ceiling(nrow(data) / num_cores))[1:nrow(data)])
-
-    # apply stringr::str_split and sapply to each split in parallel
+    
+    # Apply extract_tokens to each split in parallel
     tokens <- parallel::mclapply(data_splits, extract_tokens, col = text_column, mc.cores = num_cores)
   } else {
     # Extract tokens without parallel processing
-    tokens <- extract_tokens(data, col = text_column)
+    tokens <- extract_tokens(data, text_column)
   }
-
-  # combine the token vectors from each core and count the frequency of each token
+  
+  # Combine the token vectors from each core
   tokens <- unlist(tokens)
-  token_freq <- table(tokens) %>% as.data.frame()
-
-  # rename the columns and return the data frame
-  names(token_freq) <- c("Token", "Frequency")
-  return(token_freq %>% dplyr::arrange(desc(.data$Frequency)))
+  
+  # Convert data to data.table
+  data <- data.table(data)
+  
+  # Count the frequency of each token and convert to data.table
+  data[, Token := tokens]
+  token_freq <- data[, .(Frequency = .N), by = Token]
+  
+  # Remove rows where Token is NA
+  token_freq <- token_freq[!is.na(Token), ]
+  
+  # Order the table by Frequency in descending order
+  token_freq <- setorder(token_freq, -Frequency)
+  
+  return(head(token_freq, 10)) # Return top 10 tokens
 }

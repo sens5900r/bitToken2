@@ -50,7 +50,7 @@ a plot of their token information. The default plot type is a boxplot, but a his
 plot is also available.
 }
 \examples{
-bitToken_viz_m(chatGPT_news1, "title", rm_outliers = TRUE, info = TRUE, num_cores = 2)
-bitToken_viz_m(chatGPT_news1, "title", type = "histogram", info = TRUE, num_cores = 2)
+bitToken_viz_m(chatGPT_news1, "title", rm_outliers = TRUE, info = TRUE, use_p = FALSE)
+bitToken_viz_m(chatGPT_news1, "title", type = "histogram", info = TRUE, use_p = FALSE)
 
 }

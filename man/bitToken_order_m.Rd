@@ -9,7 +9,7 @@ bitToken_order_m(
   text_column,
   token_num,
   use_p = TRUE,
-  num_cores = parallel::detectCores()
+  num_cores = parallel::detectCores()/2
 )
 }
 \arguments{

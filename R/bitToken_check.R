@@ -17,14 +17,25 @@
 #' }
 #'
 #' @export
-
 bitToken_check <- function(data, text_column) {
-
+  # check if the data is a data frame
+  if (is.character(data)) {
+    warning(paste("Error: The 'data' argument must be an unquoted name of a data frame in the Global Environment. Please use the format bitToken_check(dataframe, \"column_name\")."))
+    return()
+  }
+  
+  # check if the text_column is a character
+  if (!is.character(text_column)) {
+    warning(paste("Error: The 'text_column' argument must be a quoted name of a column in the 'data' data frame. Please use the format bitToken_check(dataframe, \"column_name\")."))
+    return()
+  }
+  
   # check if the specified text_column is a valid column in the data frame
   if (!text_column %in% names(data)) {
-    stop(paste("Error: '", text_column, "' is not a valid column name in the data frame.", sep = ""))
+    warning(paste("Error: '", text_column, "' is not a valid column name in the data frame.", sep = ""))
+    return()
   }
-
+  
   # check if the specified text_column contains only text data
   if (!is.character(data[[text_column]])) {
     return(paste("The column '", text_column, "' contains non-text data and cannot be tokenized with bitToken().", sep = ""))

@@ -18,29 +18,39 @@
 #' @examples
 #' bitToken_location_m(chatGPT_news1, "title", "COVID", num_cores = 2)
 #' @import parallel
-#' @import stringr
+#' @import stringi
+#' @import data.table
 #' @export
 bitToken_location_m <- function(data, text_column, pattern, use_p = TRUE, num_cores = parallel::detectCores()) {
-  # check if input is valid
-  if (!is.data.frame(data)) {
-    stop("Invalid input. The input must be a data frame.")
+  # check if data is a data frame or a data.table
+  if (!is.data.frame(data) && !data.table::is.data.table(data)) {
+    stop("Invalid input: 'data' must be a data frame or a data.table.")
   }
+  
+  # check if text_column is a valid column
   if (!text_column %in% names(data)) {
-    stop(paste("Error: '", text_column, "' is not a valid column name in the data frame.", sep = ""))
+    stop(paste("Invalid input: '", text_column, "' is not a valid column name in the data frame.", sep = ""))
   }
-
+  
+  # check if text_column contains character data
+  if (!is.character(data[[text_column]])) {
+    stop(paste("Invalid input: '", text_column, "' must be a character column.", sep = ""))
+  }
   # Limit the number of cores to a half of the total cores
   num_cores <- min(num_cores, parallel::detectCores() / 2)
-
+  
+  # convert to data.table
+  dt <- data.table::as.data.table(data)
+  
   # Tokenize the text column by splitting on whitespace
-  tokens <- stringr::str_split(data[[text_column]], "\\s+")
-
+  tokens <- stringi::stri_split_fixed(dt[[text_column]], " ")
+  
   # Construct a vector marking the locations of the specified pattern
   positions <- parallel::mclapply(tokens, function(token_list) {
     unname(sapply(token_list, function(token) {
       as.integer(grepl(pattern, token, fixed = TRUE))
     }))
   }, mc.cores = num_cores)
-
+  
   return(positions)
 }

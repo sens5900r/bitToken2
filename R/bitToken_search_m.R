@@ -21,43 +21,45 @@
 #' # Search for 'COVID' at second position in titles using multiple cores
 #' titles_COVID <- bitToken_search_m(chatGPT_news1, "title", "COVID", location=2, num_cores=2)
 #' @export
-#' @import stringr
+#' @import data.table
+#' @import stringi
 #' @import parallel
 bitToken_search_m <- function(data, text_column, pattern, another_column = NULL, location = NULL, num_cores = parallel::detectCores()) {
   # check if input is valid
   if (!is.data.frame(data)) {
     stop("Invalid input. The input must be a data frame.")
   }
+  data <- data.table::as.data.table(data)
+  
   if (!text_column %in% names(data)) {
     stop(paste("Error: '", text_column, "' is not a valid column name in the data frame.", sep = ""))
   }
   if (!is.null(another_column) && !another_column %in% names(data)) {
     stop(paste("Error: '", another_column, "' is not a valid column name in the data frame.", sep = ""))
   }
-
+  
   # Limit the number of cores to a half of the total cores
   num_cores <- min(num_cores, parallel::detectCores() / 2)
-
+  
   if (is.null(location)) {
-    positions <- stringr::str_detect(data[[text_column]], pattern)
+    positions <- stringi::stri_detect_fixed(data[[text_column]], pattern)
   } else {
-    tokens <- stringr::str_split(data[[text_column]], "\\s+")
+    tokens <- stringi::stri_split_fixed(data[[text_column]], " ")
     positions <- unlist(parallel::mclapply(tokens, function(token_list) {
       if (length(token_list) >= location) {
-        return(grepl(pattern, token_list[location], fixed = TRUE))
+        return(stringi::stri_detect_fixed(token_list[location], pattern))
       } else {
         return(FALSE)
       }
     }, mc.cores = num_cores))
   }
-
   # if another_column is not specified, use text_column
   if (is.null(another_column)) {
     another_column <- text_column
   }
-
+  
   # Extract the positions where the condition is true
-  filtered_data <- data[positions, another_column]
-
+  filtered_data <- data[positions, another_column, with = FALSE]
+  
   return(filtered_data)
 }

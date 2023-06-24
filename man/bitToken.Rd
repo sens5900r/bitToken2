@@ -41,8 +41,3 @@ token_lengths <- bitToken(data = chatGPT_news1, text_column = "title", lengths=T
 }
 
 }
-\seealso{
-\code{\link[stringr]{str_split}} for more information on string splitting
-}
-\keyword{text}
-\keyword{tokenizing}

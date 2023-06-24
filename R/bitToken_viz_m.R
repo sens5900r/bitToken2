@@ -23,8 +23,8 @@
 #' @return A plot of the token information for the input character vectors.
 #'
 #' @examples
-#' bitToken_viz_m(chatGPT_news1, "title", rm_outliers = TRUE, info = TRUE, num_cores = 2)
-#' bitToken_viz_m(chatGPT_news1, "title", type = "histogram", info = TRUE, num_cores = 2)
+#' bitToken_viz_m(chatGPT_news1, "title", rm_outliers = TRUE, info = TRUE, use_p = FALSE)
+#' bitToken_viz_m(chatGPT_news1, "title", type = "histogram", info = TRUE, use_p = FALSE)
 #'
 #' @export
 #' @import graphics parallel

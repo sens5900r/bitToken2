@@ -1,3 +1,7 @@
+bitToken2 0.4.3
+- The internal structure of the functions has been migrated from dplyr and stringr to data.table and stringi.
+- Added new functions bitToken_search(), bitToken_search2(), bitToken_pattern_trend(), and others.
+
 bitToken2 0.4.2
 - Fixes were made to the README.md
 - Added bitToken_search() function for filtering rows based on a specific pattern's occurrence at a specified location in a text column.

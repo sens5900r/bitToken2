@@ -22,37 +22,47 @@
 #' chatGPT_news1$comma_count <- bitToken_count_m(chatGPT_news1, "title", pattern = ",", num_cores = 2)
 #'
 #' @export
-#' @import stringr parallel
+#' @import parallel
+#' @import data.table
+#' @import stringi
 bitToken_count_m <- function(data, text_column, pattern, location = NULL, sum_info = FALSE, num_cores = parallel::detectCores()) {
+  # Checking for correct input type and column existence
   if (!is.data.frame(data)) {
-    stop("Invalid input. The input must be a data frame.")
+    stop("Invalid input: 'data' must be a data frame. Also, ensure you have not quoted the data frame name.")
   }
-  if (!text_column %in% names(data)) {
+  
+  # Convert to data.table
+  data <- data.table::as.data.table(data)
+  
+  # Check if column exists in data.table
+  if (!(text_column %in% names(data))) {
     stop(paste("Error: '", text_column, "' is not a valid column name in the data frame.", sep = ""))
   }
+  
+  # Checking for correct input in num_cores
+  if (!is.numeric(num_cores) || length(num_cores) != 1 || num_cores <= 0 || num_cores %% 1 != 0) {
+    stop("Invalid input: 'num_cores' should be a positive integer.")
+  }
 
-  data_name <- deparse(substitute(data))
-
-  # Limit the number of cores to a half of the total cores
-  num_cores <- min(num_cores, parallel::detectCores() / 2)
-
+  # Ensuring num_cores does not exceed half of the total cores
+  num_cores <- min(num_cores, parallel::detectCores() / 2)  
   if (is.null(location)) {
-    counts <- parallel::mclapply(data[[text_column]], stringr::str_count, pattern = pattern, mc.cores = num_cores)
+    counts <- parallel::mclapply(data[[text_column]], stringi::stri_count_fixed, pattern = pattern, mc.cores = num_cores)
   } else {
-    tokens <- parallel::mclapply(data[[text_column]], stringr::str_split, pattern = "\\s+", mc.cores = num_cores)
-
+    tokens <- parallel::mclapply(data[[text_column]], stringi::stri_split_fixed, pattern = " ", mc.cores = num_cores)
+    
     counts <- parallel::mclapply(tokens, function(token_list) {
       if (length(unlist(token_list)) >= location) {
-        sum(grepl(pattern, unlist(token_list)[location], fixed = TRUE))
+        sum(stringi::stri_detect_fixed(unlist(token_list)[location], pattern))
       } else {
         0
       }
     }, mc.cores = num_cores)
   }
-
+  
   # Unlist the results
   counts <- unlist(counts)
-
+  
   if (sum_info) {
     summary_info <- summary(counts)
     freq_table <- sort(table(counts), decreasing = TRUE)

@@ -21,31 +21,57 @@
 #' chatGPT_news1$comma_count <- bitToken_count(chatGPT_news1, "title", pattern = ",")
 #'
 #' @export
-#' @import stringr
+#' @import data.table
+#' @import stringi
 bitToken_count <- function(data, text_column, pattern, location = NULL, sum_info = FALSE) {
-  # check if input is valid
+  # Check if input is valid
   if (!is.data.frame(data)) {
-    stop("Invalid input. The input must be a data frame.")
+    stop("Invalid input: 'data' must be a data frame. Also, ensure you have not quoted the data frame name.")
   }
+  
+  if (!is.character(text_column)) {
+    stop("Invalid input: 'text_column' must be a string.")
+  }
+  
   if (!text_column %in% names(data)) {
     stop(paste("Error: '", text_column, "' is not a valid column name in the data frame.", sep = ""))
   }
-
+  
+  if (!is.character(pattern)) {
+    stop("Invalid input: 'pattern' must be a string.")
+  }
+  
+  if (!is.null(location) && (!is.numeric(location) || length(location) != 1 || location <= 0)) {
+    stop("Invalid input: 'location' must be a positive numeric value.")
+  }
+  
+  if (!is.logical(sum_info) || length(sum_info) != 1) {
+    stop("Invalid input: 'sum_info' must be a single logical value.")
+  }
+  
+  # Convert to data.table
+  data <- data.table::as.data.table(data)
+  
+  # check if column exists in data.table
+  if (!text_column %in% names(data)) {
+    stop(paste("Error: '", text_column, "' is not a valid column name in the data frame.", sep = ""))
+  }
+  
   data_name <- deparse(substitute(data))
-
+  
   if (is.null(location)) {
-    counts <- stringr::str_count(data[[text_column]], pattern)
+    counts <- stringi::stri_count_fixed(data[[text_column]], pattern)
   } else {
-    tokens <- stringr::str_split(data[[text_column]], "\\s+")
+    tokens <- stringi::stri_split_fixed(data[[text_column]], " ")
     counts <- vapply(tokens, function(token_list) {
       if (length(token_list) >= location) {
-        sum(grepl(pattern, token_list[location], fixed = TRUE))
+        sum(stringi::stri_detect_fixed(token_list[location], pattern))
       } else {
         0
       }
     }, numeric(1))
   }
-
+  
   if (sum_info) {
     summary_info <- summary(counts)
     freq_table <- sort(table(counts), decreasing = TRUE)

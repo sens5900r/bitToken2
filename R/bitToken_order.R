@@ -9,17 +9,31 @@
 #'
 #' @return A data frame with two columns: "Token" and "Frequency", sorted by "Frequency" in descending order.
 #'
-#' @importFrom stringr str_split
-#' @importFrom dplyr group_by arrange summarise
+#' @importFrom data.table data.table := .N setorder
+#' @importFrom stringi stri_split_fixed
 #'
 #' @examples
 #' bitToken_order(chatGPT_news1, "title", 1)
 #'
 #' @export
 bitToken_order <- function(data, text_column, token_num) {
-  tokens <- stringr::str_split(data[[text_column]], "\\s+") # split the titles into tokens
-  first_token <- sapply(tokens, function(x) x[token_num]) # get the specified token from each title
-  token_freq <- table(first_token) %>% as.data.frame() # count the frequency of each token and convert to data frame
-  names(token_freq) <- c("Token", "Frequency") # rename the columns
-  return(token_freq %>% dplyr::group_by(Token = .data$Token) %>% dplyr::summarise(Frequency = sum(.data$Frequency)) %>% dplyr::arrange(desc(.data$Frequency))) # group by token and sum the frequency, arrange by frequency in descending order
+  require(data.table)
+  require(stringi)
+  
+  data <- data.table(data) # Convert data to data.table
+  
+  # Split the text_column into tokens and select the specified token_num
+  token_split <- stringi::stri_split_fixed(data[[text_column]], " ")
+  data[, Token := sapply(token_split, function(x) if(length(x) >= token_num) x[token_num] else NA)]
+  
+  # Count the frequency of each token and convert to data.table
+  token_freq <- data[, .(Frequency = .N), by = Token]
+  
+  # Remove rows where Token is NA
+  token_freq <- token_freq[!is.na(Token), ]
+  
+  # Order the table by Frequency in descending order
+  token_freq <- setorder(token_freq, -Frequency)
+  
+  return(head(token_freq, 10)) # Return top 10 tokens
 }

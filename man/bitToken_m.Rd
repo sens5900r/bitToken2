@@ -27,30 +27,11 @@ bitToken_m(
 
 \item{use_p}{A logical value. If \code{FALSE}, the function will not use the 'use_p' argument in its calculations. Default is \code{TRUE}.}
 
-\item{num_cores}{The number of cores to use for parallel processing.
-By default, it is set to the number of available cores detected by \code{parallel::detectCores()}.
-However, the number of cores used is limited to half of the total available cores.}
+\item{num_cores}{The number of cores to use for parallel processing.}
 }
 \value{
 A list of token vectors or a vector of token lengths
 }
 \description{
-This function tokenizes text data in a specified column of a data frame.
-The resulting tokens are returned as a list or, optionally, as a vector of token lengths.
-Filtering options are also available to allow the user to filter the data frame based on specific values.
+Tokenize text data in a data frame (Multicore)
 }
-\examples{
-\dontrun{
-library(bitToken2)
-data(chatGPT_news1)
-tokens <- bitToken_m(chatGPT_news1, "title", use_p = FALSE)
-head(tokens)
-token_lengths <- bitToken_m(chatGPT_news1, "title", lengths=TRUE, use_p = FALSE)
-}
-
-}
-\seealso{
-\code{\link[stringr]{str_split}} for more information on string splitting
-}
-\keyword{text}
-\keyword{tokenizing}
