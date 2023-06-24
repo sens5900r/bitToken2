@@ -66,12 +66,14 @@ bitToken_info <- function(data, text_column, add = FALSE, min_t = 1, max_t = Inf
     mean_tokens <- round(mean(token_count), 2)
     prop_valid <- round(sum(token_count >= min_t & token_count <= max_t) / num_rows, 2)
     object_size <- format(utils::object.size(data), units = "auto", standard = "SI")
-    mean_size <- format(utils::object.size(data)/num_rows, units = "auto", standard = "SI")
+    variable_size <- format(utils::object.size(data[[text_column]]), units = "auto", standard = "SI")  # Get size of the specific variable
+    mean_size_variable <- format(utils::object.size(data[[text_column]])/num_rows, units = "auto", standard = "SI")
     cat("Object size:", object_size, "\n")
+    cat("Variable size:", variable_size, "\n")  # Print out the size of the specific variable
     cat("Number of rows:", num_rows, "\n")
-    cat(paste0("Mean size per row:", mean_size, "\n"))
+    cat("Mean size per row for the variable: ", mean_size_variable, "\n")
     cat("Mean number of tokens:", mean_tokens, "\n")
-    cat(paste0("Proportion of rows with ", min_t, " to ", max_t, " tokens:", prop_valid, "\n"))
+    cat(paste0("Proportion of rows with ", min_t, " to ", max_t, " tokens: ", prop_valid, "\n"))
     
     # Print token info summary for the specified range
     cat("\nToken info summary within the specified range:\n")
