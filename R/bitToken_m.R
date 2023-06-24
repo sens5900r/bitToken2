@@ -52,10 +52,14 @@ bitToken_m <- function(data, text_column, filter_var = NULL, filter_vals = NULL,
     tokenize_text <- function(text) stringi::stri_split_regex(text, "\\s+")
     # parallel tokenize
     tokens <- parallel::mclapply(data[[text_column]], tokenize_text, mc.cores = num_cores)
+    # Flatten the list of lists to a single list
+    tokens <- lapply(tokens, unlist)
   } else {
     tokenize_text <- function(text) stringi::stri_split_boundaries(text, type = "word")
     # non-parallel tokenize
     tokens <- lapply(data[[text_column]], tokenize_text)
+    # Flatten the list of lists to a single list
+    tokens <- lapply(tokens, unlist)
   }
   
   # return the tokens or lengths
