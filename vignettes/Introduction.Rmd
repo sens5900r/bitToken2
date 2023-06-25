@@ -121,7 +121,7 @@ rows_with_min_tokens_values <- bitToken_min(chatGPT_news1, "title", min_tokens =
 
 ## **Multi-core Support**
 
-The package now includes multi-core support for several functions, allowing for parallel processing to greatly speed up processing time for large datasets. The **`bitToken_m()`**, **`bitToken_count_m()`**, **`bitToken_info_m()`**, **`bitToken_min_m()`** , **`bitToken_order_m()`**, and **`bitToken_viz_m()`** functions have been updated to utilize parallel processing with the **`parallel::mclapply()`** function, with support for up to 8 cores.
+The package now includes multi-core support for several functions, allowing for parallel processing to greatly speed up processing time for large datasets. The **`bitToken_m()`**,  **`bitToken_info_m()`**, **`bitToken_min_m()`** , **`bitToken_order_m()`**, and **`bitToken_viz_m()`** functions have been updated to utilize parallel processing with the **`parallel::mclapply()`** function, with support for up to 8 cores.
 
 Here is an example of how to use the multi-core supported **`bitToken_m()`** function:
 

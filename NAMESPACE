@@ -3,7 +3,6 @@
 export(bitToken)
 export(bitToken_check)
 export(bitToken_count)
-export(bitToken_count_m)
 export(bitToken_info)
 export(bitToken_info_m)
 export(bitToken_location)

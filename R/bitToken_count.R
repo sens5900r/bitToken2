@@ -57,8 +57,6 @@ bitToken_count <- function(data, text_column, pattern, location = NULL, sum_info
     stop(paste("Error: '", text_column, "' is not a valid column name in the data frame.", sep = ""))
   }
   
-  data_name <- deparse(substitute(data))
-  
   if (is.null(location)) {
     counts <- stringi::stri_count_fixed(data[[text_column]], pattern)
   } else {
@@ -75,7 +73,7 @@ bitToken_count <- function(data, text_column, pattern, location = NULL, sum_info
   if (sum_info) {
     summary_info <- summary(counts)
     freq_table <- sort(table(counts), decreasing = TRUE)
-    title <- paste("Summary for pattern '", pattern, "' in column '", text_column, "'", "in dataset, ", data_name, sep = "")
+    title <- paste("Summary for pattern '", pattern, "' in column '", text_column, "'", sep = "")
     return(list(title = title, counts = counts, summary = summary_info, frequency_table = freq_table))
   } else {
     return(counts)
